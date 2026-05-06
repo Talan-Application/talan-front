@@ -1,0 +1,31 @@
+.otp-container {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin: 1.75rem 0 1.25rem;
+}
+
+.otp-digit {
+  width: 52px;
+  height: 60px;
+  background: #f9f9f9;
+  border: 1.5px solid #d0d0d0;
+  border-radius: 10px;
+  color: #111111;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+  caret-color: transparent;
+}
+
+.otp-digit:focus {
+  border-color: #aa3bff;
+  box-shadow: 0 0 0 3px rgba(170, 59, 255, 0.15);
+}
+
+.otp-digit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
