@@ -29,6 +29,9 @@ export function HomePage() {
         {user && (
           <p className="home-email">{user.email}</p>
         )}
+        <button className="home-nav-btn" onClick={() => navigate('/quizzes')}>
+          Quiz Management
+        </button>
         <button className="logout-btn" onClick={handleLogout}>
           Sign out
         </button>
