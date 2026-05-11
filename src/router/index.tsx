@@ -3,6 +3,7 @@ import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
 import { ConfirmCodePage } from '../pages/ConfirmCodePage';
 import { HomePage } from '../pages/HomePage';
+import { QuizPage } from '../pages/QuizPage';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 
 export const router = createBrowserRouter([
@@ -14,6 +15,14 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <HomePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/quizzes',
+    element: (
+      <ProtectedRoute>
+        <QuizPage />
       </ProtectedRoute>
     ),
   },
