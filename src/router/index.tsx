@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
   {
     path: '/quizzes',
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute allowedRoles={['curator', 'teacher', 'admin']}>
         <QuizPage />
       </ProtectedRoute>
     ),
