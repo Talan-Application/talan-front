@@ -22,13 +22,14 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AuthState>(() => ({
-    user: null,
+    user: tokenStorage.getUser<User>(),
     isAuthenticated: !!tokenStorage.getAccess(),
   }));
 
   const setAuthData = useCallback((data: AuthResponse): void => {
     tokenStorage.setAccess(data.access_token);
     tokenStorage.setRefresh(data.refresh_token);
+    tokenStorage.setUser(data.user);
     setState({ user: data.user, isAuthenticated: true });
   }, []);
 

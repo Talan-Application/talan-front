@@ -14,6 +14,9 @@ export interface Question {
   id: number;
   quiz_id: number;
   text: string;
+  context?: string;
+  video_answer_url?: string;
+  order?: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -41,7 +44,19 @@ export interface UpdateQuizRequest {
   type?: string;
   subject_id?: number;
 }
-export interface CreateQuestionRequest { quiz_id: number; text: string; }
-export interface UpdateQuestionRequest { quiz_id?: number; text?: string; }
+export interface CreateQuestionRequest {
+  quiz_id: number;
+  text: string;
+  context?: string;
+  video_answer_url?: string;
+  order?: number;
+}
+export interface UpdateQuestionRequest {
+  quiz_id?: number;
+  text?: string;
+  context?: string;
+  video_answer_url?: string;
+  order?: number;
+}
 export interface CreateAnswerRequest { question_id: number; text: string; is_correct: boolean; }
 export interface UpdateAnswerRequest { question_id?: number; text?: string; is_correct?: boolean; }
