@@ -5,6 +5,7 @@ import { ConfirmCodePage } from '../pages/ConfirmCodePage';
 import { HomePage } from '../pages/HomePage';
 import { QuizPage } from '../pages/QuizPage';
 import { ProtectedRoute } from '../components/ProtectedRoute';
+import { Layout } from '../components/Layout';
 
 export const router = createBrowserRouter([
   { path: '/login', element: <LoginPage /> },
@@ -14,7 +15,9 @@ export const router = createBrowserRouter([
     path: '/',
     element: (
       <ProtectedRoute>
-        <HomePage />
+        <Layout>
+          <HomePage />
+        </Layout>
       </ProtectedRoute>
     ),
   },
@@ -22,7 +25,9 @@ export const router = createBrowserRouter([
     path: '/quizzes',
     element: (
       <ProtectedRoute allowedRoles={['curator', 'teacher', 'admin']}>
-        <QuizPage />
+        <Layout>
+          <QuizPage />
+        </Layout>
       </ProtectedRoute>
     ),
   },

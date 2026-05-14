@@ -1,73 +1,56 @@
 .home-page {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #eff6ff;
-  padding: 1rem;
+  padding: 2.5rem 2rem;
 }
 
-.home-card {
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 14px;
-  padding: 3rem;
-  text-align: center;
-  max-width: 420px;
-  width: 100%;
+.home-hero {
+  margin-bottom: 2.5rem;
 }
 
 .home-title {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 700;
-  color: #111111;
+  color: var(--text-h);
   margin: 0 0 0.5rem;
+  letter-spacing: -0.5px;
 }
 
 .home-subtitle {
-  color: #666666;
-  margin: 0 0 0.5rem;
-  font-size: 0.95rem;
+  color: var(--text);
+  font-size: 1rem;
+  margin: 0;
 }
 
-.home-email {
-  color: #2563eb;
-  font-size: 0.875rem;
-  margin: 0 0 2rem;
+.home-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
 }
 
-.home-nav-btn {
-  display: block;
-  width: 100%;
-  background: #2563eb;
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  cursor: pointer;
+.home-stat-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  cursor: default;
+}
+
+.home-stat-card:hover {
+  border-color: var(--accent-border);
+  box-shadow: var(--shadow);
+}
+
+.home-stat-icon {
+  font-size: 1.75rem;
+}
+
+.home-stat-label {
   font-size: 0.9rem;
   font-weight: 600;
-  padding: 0.625rem 1.75rem;
-  margin-bottom: 0.75rem;
-  transition: background 0.15s;
-}
-
-.home-nav-btn:hover {
-  background: #1d4ed8;
-}
-
-.logout-btn {
-  background: transparent;
-  border: 1.5px solid #d0d0d0;
-  border-radius: 8px;
-  color: #444444;
-  cursor: pointer;
-  font-size: 0.9rem;
-  padding: 0.625rem 1.75rem;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
-}
-
-.logout-btn:hover {
-  background: rgba(0, 0, 0, 0.05);
-  border-color: #999999;
-  color: #111111;
+  color: var(--text-h);
+  margin: 0;
 }

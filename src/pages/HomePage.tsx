@@ -1,40 +1,37 @@
-import { useNavigate } from 'react-router-dom';
-import { authApi } from '../api';
 import { useAuth } from '../contexts/AuthContext';
 import './home.css';
 
 export function HomePage() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  async function handleLogout() {
-    try {
-      await authApi.logout();
-    } catch {
-      // proceed with local logout regardless of server response
-    }
-    logout();
-    navigate('/login', { replace: true });
-  }
-
-  const displayName = user
-    ? `${user.first_name} ${user.last_name}`
-    : 'there';
+  const { user } = useAuth();
 
   return (
     <div className="home-page">
-      <div className="home-card">
-        <h1 className="home-title">Welcome, {displayName}!</h1>
-        <p className="home-subtitle">You are successfully authenticated.</p>
-        {user && (
-          <p className="home-email">{user.email}</p>
-        )}
-        <button className="home-nav-btn" onClick={() => navigate('/quizzes')}>
-          Quiz Management
-        </button>
-        <button className="logout-btn" onClick={handleLogout}>
-          Sign out
-        </button>
+      <div className="home-hero">
+        <h1 className="home-title">
+          Welcome back{user ? `, ${user.first_name}` : ''}!
+        </h1>
+        <p className="home-subtitle">
+          Manage your quizzes, courses, and learning content all in one place.
+        </p>
+      </div>
+
+      <div className="home-cards">
+        <div className="home-stat-card">
+          <span className="home-stat-icon">📝</span>
+          <p className="home-stat-label">Quizzes</p>
+        </div>
+        <div className="home-stat-card">
+          <span className="home-stat-icon">📚</span>
+          <p className="home-stat-label">Courses</p>
+        </div>
+        <div className="home-stat-card">
+          <span className="home-stat-icon">🎓</span>
+          <p className="home-stat-label">Subjects</p>
+        </div>
+        <div className="home-stat-card">
+          <span className="home-stat-icon">👥</span>
+          <p className="home-stat-label">Users</p>
+        </div>
       </div>
     </div>
   );
