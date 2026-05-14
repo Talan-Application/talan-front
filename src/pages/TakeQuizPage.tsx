@@ -1,0 +1,198 @@
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { quizApi } from '../api/quiz';
+import type { TakeQuizResponse, SubmitQuizResponse, QuestionResult } from '../types/quiz.types';
+import { getApiErrorMessage } from '../utils/error';
+import './take-quiz.css';
+
+type Phase = 'loading' | 'taking' | 'submitting' | 'done' | 'error';
+
+export function TakeQuizPage() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const quizId = Number(id);
+
+  const [phase, setPhase] = useState<Phase>('loading');
+  const [quizData, setQuizData] = useState<TakeQuizResponse | null>(null);
+  const [selected, setSelected] = useState<Record<number, number>>({});
+  const [submitResult, setSubmitResult] = useState<SubmitQuizResponse | null>(null);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    quizApi.takeQuiz(quizId)
+      .then(data => { setQuizData(data); setPhase('taking'); })
+      .catch(err => { setError(getApiErrorMessage(err)); setPhase('error'); });
+  }, [quizId]);
+
+  function select(questionId: number, answerId: number) {
+    setSelected(s => ({ ...s, [questionId]: answerId }));
+  }
+
+  const questions = quizData?.questions ?? [];
+  const answeredCount = Object.keys(selected).length;
+  const allAnswered = questions.length > 0 && answeredCount === questions.length;
+
+  async function submit() {
+    if (!allAnswered) return;
+    setPhase('submitting');
+    try {
+      const result = await quizApi.submitQuiz(quizId, {
+        answers: questions.map(q => ({ question_id: q.id, answer_id: selected[q.id] })),
+      });
+      setSubmitResult(result);
+      setPhase('done');
+    } catch (err) {
+      setError(getApiErrorMessage(err));
+      setPhase('error');
+    }
+  }
+
+  if (phase === 'loading') {
+    return (
+      <div className="tq-page">
+        <div className="tq-loading"><span className="qm-spinner" /> Loading quiz…</div>
+      </div>
+    );
+  }
+
+  if (phase === 'error') {
+    return (
+      <div className="tq-page">
+        <div className="tq-loading tq-error">{error}</div>
+        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+          <button className="qm-btn qm-btn-ghost" onClick={() => navigate(-1)}>Go back</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (phase === 'done' && submitResult) {
+    return <ResultView data={submitResult} questions={quizData!} onRetry={() => navigate(0)} onBack={() => navigate(-1)} onResults={() => navigate(`/quizzes/${quizId}/results`)} />;
+  }
+
+  return (
+    <div className="tq-page">
+      <div className="tq-header">
+        <button className="qm-back-btn" onClick={() => navigate(-1)}>← Back</button>
+        <h1 className="tq-quiz-title">{quizData?.quiz.title}</h1>
+        <span className="tq-progress">{answeredCount} / {questions.length} answered</span>
+      </div>
+
+      <div className="tq-content">
+        {questions.map((q, idx) => {
+          const chosen = selected[q.id];
+          return (
+            <div key={q.id} className="tq-question">
+              <p className="tq-q-num">Question {idx + 1}</p>
+              <p className="tq-q-text">{q.text}</p>
+              {q.context && <p className="tq-q-context">{q.context}</p>}
+              <div className="tq-answers">
+                {q.answers.map(ans => (
+                  <label key={ans.id} className={`tq-answer${chosen === ans.id ? ' tq-answer-selected' : ''}`}>
+                    <input
+                      type="radio"
+                      name={`q-${q.id}`}
+                      value={ans.id}
+                      checked={chosen === ans.id}
+                      onChange={() => select(q.id, ans.id)}
+                    />
+                    <span>{ans.text}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+
+        <div className="tq-footer">
+          {!allAnswered && (
+            <p className="tq-hint">{questions.length - answeredCount} question(s) remaining</p>
+          )}
+          <button
+            className="qm-btn qm-btn-primary tq-submit-btn"
+            onClick={submit}
+            disabled={!allAnswered || phase === 'submitting'}
+          >
+            {phase === 'submitting' ? 'Submitting…' : 'Submit Quiz'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Result view ───────────────────────────────────────────────────────────────
+
+function ResultView({ data, questions, onRetry, onBack, onResults }: {
+  data: SubmitQuizResponse;
+  questions: TakeQuizResponse;
+  onRetry: () => void;
+  onBack: () => void;
+  onResults: () => void;
+}) {
+  const pct = Math.round(data.score);
+  const passed = pct >= 60;
+
+  const resultMap: Record<number, QuestionResult> = {};
+  for (const r of data.results) resultMap[r.question_id] = r;
+
+  return (
+    <div className="tq-page">
+      <div className="tq-result-card">
+        <div className={`tq-score-circle ${passed ? 'tq-score-pass' : 'tq-score-fail'}`}>
+          <span className="tq-score-pct">{pct}%</span>
+          <span className="tq-score-label">{passed ? 'Passed' : 'Failed'}</span>
+        </div>
+        <div className="tq-score-stats">
+          <div className="tq-stat">
+            <span className="tq-stat-val">{data.correct_answers}</span>
+            <span className="tq-stat-lbl">Correct</span>
+          </div>
+          <div className="tq-stat">
+            <span className="tq-stat-val">{data.total_questions - data.correct_answers}</span>
+            <span className="tq-stat-lbl">Wrong</span>
+          </div>
+          <div className="tq-stat">
+            <span className="tq-stat-val">{data.total_questions}</span>
+            <span className="tq-stat-lbl">Total</span>
+          </div>
+        </div>
+
+        <div className="tq-result-actions">
+          <button className="qm-btn qm-btn-primary" onClick={onResults}>View History</button>
+          <button className="qm-btn qm-btn-ghost" onClick={onRetry}>Retake</button>
+          <button className="qm-btn qm-btn-ghost" onClick={onBack}>Back</button>
+        </div>
+      </div>
+
+      <div className="tq-content tq-breakdown">
+        <h2 className="tq-breakdown-title">Question Breakdown</h2>
+        {questions.questions.map((q, idx) => {
+          const r = resultMap[q.id];
+          const correct = r?.is_correct ?? false;
+          const chosenAns = q.answers.find(a => a.id === r?.answer_id);
+          const correctAns = q.answers.find(a => a.id === r?.correct_answer_id);
+          return (
+            <div key={q.id} className={`tq-breakdown-item ${correct ? 'tq-bd-correct' : 'tq-bd-wrong'}`}>
+              <div className="tq-bd-header">
+                <span className="tq-bd-num">Q{idx + 1}</span>
+                <span className="tq-bd-icon">{correct ? '✓' : '✗'}</span>
+              </div>
+              <p className="tq-bd-text">{q.text}</p>
+              {chosenAns && (
+                <p className="tq-bd-answer">
+                  Your answer: <strong>{chosenAns.text}</strong>
+                </p>
+              )}
+              {!correct && correctAns && (
+                <p className="tq-bd-correct-ans">
+                  Correct: <strong>{correctAns.text}</strong>
+                </p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

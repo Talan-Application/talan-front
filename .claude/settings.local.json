@@ -4,7 +4,8 @@
       "Bash(npx tsc *)",
       "Bash(npm run *)",
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\oralh\\\\VsCodeProjects\\\\talan-front\\\\src\" -Recurse -Filter \"*.tsx\" -o Name)",
-      "Bash(Find \"C:\\\\Users\\\\oralh\\\\VsCodeProjects\\\\talan-front\\\\src\" -type f \\\\\\( -name \"*.ts\" -o -name \"*.tsx\" \\\\\\))"
+      "Bash(Find \"C:\\\\Users\\\\oralh\\\\VsCodeProjects\\\\talan-front\\\\src\" -type f \\\\\\( -name \"*.ts\" -o -name \"*.tsx\" \\\\\\))",
+      "Bash(grep -E \"^-.*\\\\.\\(env|md|css|html\\)$\")"
     ]
   }
 }

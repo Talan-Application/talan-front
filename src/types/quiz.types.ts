@@ -60,3 +60,66 @@ export interface UpdateQuestionRequest {
 }
 export interface CreateAnswerRequest { question_id: number; text: string; is_correct: boolean; }
 export interface UpdateAnswerRequest { question_id?: number; text?: string; is_correct?: boolean; }
+
+// ── Take quiz ──────────────────────────────────────────────────────────────────
+
+export interface TakeQuizAnswer {
+  id: number;
+  text: string;
+}
+
+export interface TakeQuizQuestion {
+  id: number;
+  text: string;
+  context: string;
+  video_answer_url: string;
+  order: number;
+  answers: TakeQuizAnswer[];
+}
+
+export interface TakeQuizResponse {
+  quiz: Quiz;
+  questions: TakeQuizQuestion[];
+}
+
+// ── Submit quiz ────────────────────────────────────────────────────────────────
+
+export interface QuizAnswerSubmission {
+  question_id: number;
+  answer_id: number;
+}
+
+export interface SubmitQuizRequest {
+  answers: QuizAnswerSubmission[];
+}
+
+export interface QuestionResult {
+  question_id: number;
+  answer_id: number;
+  is_correct: boolean;
+  correct_answer_id: number;
+}
+
+export interface SubmitQuizResponse {
+  result_id: number;
+  total_questions: number;
+  correct_answers: number;
+  score: number;
+  results: QuestionResult[];
+}
+
+// ── Results history ────────────────────────────────────────────────────────────
+
+export interface QuizResultSummary {
+  id: number;
+  quiz_id: number;
+  user_id: number;
+  score: number;
+  total_questions: number;
+  correct_answers: number;
+  submitted_at: number;
+}
+
+export interface GetQuizResultsResponse {
+  results: QuizResultSummary[];
+}
