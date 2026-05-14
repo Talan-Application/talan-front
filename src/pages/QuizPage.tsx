@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { quizApi } from '../api/quiz';
+
 import { questionApi } from '../api/question';
 import { answerApi } from '../api/answer';
 import type { Quiz, Question, Answer } from '../types/quiz.types';
@@ -58,6 +59,7 @@ function QuizCard({ item, onEdit, onDelete }: {
   onEdit: () => void;
   onDelete: () => void;
 }) {
+  const navigate = useNavigate();
   return (
     <div className="quiz-card">
       <div className="quiz-card-top">
@@ -80,6 +82,8 @@ function QuizCard({ item, onEdit, onDelete }: {
         </div>
       </dl>
       <div className="quiz-card-actions">
+        <button className="qm-btn qm-btn-sm qm-btn-primary" onClick={() => navigate(`/quizzes/${item.id}/take`)}>Take</button>
+        <button className="qm-btn qm-btn-sm qm-btn-ghost" onClick={() => navigate(`/quizzes/${item.id}/results`)}>Results</button>
         <button className="qm-btn qm-btn-sm qm-btn-ghost" onClick={onEdit}>Edit</button>
         <button className="qm-btn qm-btn-sm qm-btn-danger" onClick={onDelete}>Delete</button>
       </div>

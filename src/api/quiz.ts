@@ -1,5 +1,8 @@
 import { apiClient } from './client';
-import type { Quiz, CreateQuizRequest, UpdateQuizRequest } from '../types/quiz.types';
+import type {
+  Quiz, CreateQuizRequest, UpdateQuizRequest,
+  TakeQuizResponse, SubmitQuizRequest, SubmitQuizResponse, GetQuizResultsResponse,
+} from '../types/quiz.types';
 
 function toArray<T>(data: unknown): T[] {
   if (Array.isArray(data)) return data as T[];
@@ -17,4 +20,9 @@ export const quizApi = {
   create: (data: CreateQuizRequest) => apiClient.post<Quiz>('/quizzes', data).then(r => r.data),
   update: (id: number, data: UpdateQuizRequest) => apiClient.put<Quiz>(`/quizzes/${id}`, data).then(r => r.data),
   delete: (id: number) => apiClient.delete(`/quizzes/${id}`),
+  takeQuiz: (id: number) => apiClient.get<TakeQuizResponse>(`/quizzes/${id}/take`).then(r => r.data),
+  submitQuiz: (id: number, data: SubmitQuizRequest) =>
+    apiClient.post<SubmitQuizResponse>(`/quizzes/${id}/submit`, data).then(r => r.data),
+  getResults: (id: number) =>
+    apiClient.get<GetQuizResultsResponse>(`/quizzes/${id}/results`).then(r => r.data),
 };

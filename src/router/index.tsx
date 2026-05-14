@@ -4,6 +4,8 @@ import { RegisterPage } from '../pages/RegisterPage';
 import { ConfirmCodePage } from '../pages/ConfirmCodePage';
 import { HomePage } from '../pages/HomePage';
 import { QuizPage } from '../pages/QuizPage';
+import { TakeQuizPage } from '../pages/TakeQuizPage';
+import { QuizResultsPage } from '../pages/QuizResultsPage';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import { Layout } from '../components/Layout';
 
@@ -27,6 +29,26 @@ export const router = createBrowserRouter([
       <ProtectedRoute allowedRoles={['curator', 'teacher', 'admin']}>
         <Layout>
           <QuizPage />
+        </Layout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/quizzes/:id/take',
+    element: (
+      <ProtectedRoute>
+        <Layout>
+          <TakeQuizPage />
+        </Layout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/quizzes/:id/results',
+    element: (
+      <ProtectedRoute>
+        <Layout>
+          <QuizResultsPage />
         </Layout>
       </ProtectedRoute>
     ),
