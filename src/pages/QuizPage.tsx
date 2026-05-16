@@ -10,7 +10,6 @@ import './quiz.css';
 
 const PAGE_SIZES = [6, 12, 24];
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
 
 function formatDate(ts: number) {
   const ms = ts > 1e12 ? ts : ts * 1000;
@@ -315,15 +314,17 @@ function EditQuestionsModal({ quiz, onClose }: { quiz: Quiz; onClose: () => void
     setLoading(true);
     setLoadError('');
     try {
-      const [allQuestions, allAnswers] = await Promise.all([
-        questionApi.getAll(),
-        answerApi.getAll(),
-      ]);
-      const quizQuestions = allQuestions.filter(q => q.quiz_id === quiz.id);
-      setQuestions(quizQuestions.map(q => ({
-        ...q,
-        answers: allAnswers.filter(a => a.question_id === q.id),
-      })));
+      const rawQuestions = await questionApi.getByQuizId(quiz.id, { limit: 100, offset: 0 });
+      const questionsWithAnswers = await Promise.all(
+        rawQuestions.map(async q => {
+          const rawAnswers = await answerApi.getByQuestionId(q.id, { limit: 100, offset: 0 });
+          return {
+            ...q,
+            answers: rawAnswers.map(a => ({ ...a, is_correct: a.correct })),
+          };
+        })
+      );
+      setQuestions(questionsWithAnswers);
     } catch {
       setLoadError('Failed to load questions.');
     } finally {

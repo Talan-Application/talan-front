@@ -17,8 +17,8 @@ export interface Question {
   context?: string;
   video_answer_url?: string;
   order?: number;
-  created_at?: string;
-  updated_at?: string;
+  created_at?: number;
+  updated_at?: number;
 }
 
 export interface Answer {
@@ -26,8 +26,38 @@ export interface Answer {
   question_id: number;
   text: string;
   is_correct: boolean;
-  created_at?: string;
-  updated_at?: string;
+  created_at?: number;
+  updated_at?: number;
+}
+
+// ── API response shapes for list endpoints ────────────────────────────────────
+
+export interface QuestionResponse {
+  id: number;
+  quiz_id: number;
+  text: string;
+  context: string;
+  video_answer_url: string;
+  order: number;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface GetAllQuestionsResponse {
+  questions: QuestionResponse[];
+}
+
+export interface AnswerResponse {
+  id: number;
+  question_id: number;
+  text: string;
+  correct: boolean;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface GetAllAnswersResponse {
+  answers: AnswerResponse[];
 }
 
 export interface CreateQuizRequest {

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { quizApi } from '../api/quiz';
+import { questionApi } from '../api/question';
+import { answerApi } from '../api/answer';
 import type { TakeQuizResponse, SubmitQuizResponse, QuestionResult } from '../types/quiz.types';
 import { getApiErrorMessage } from '../utils/error';
 import './take-quiz.css';
@@ -19,9 +21,33 @@ export function TakeQuizPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    quizApi.takeQuiz(quizId)
-      .then(data => { setQuizData(data); setPhase('taking'); })
-      .catch(err => { setError(getApiErrorMessage(err)); setPhase('error'); });
+    async function load() {
+      try {
+        const [quiz, rawQuestions] = await Promise.all([
+          quizApi.getById(quizId),
+          questionApi.getByQuizId(quizId, { limit: 100, offset: 0 }),
+        ]);
+        const questions = await Promise.all(
+          rawQuestions.map(async q => {
+            const rawAnswers = await answerApi.getByQuestionId(q.id, { limit: 100, offset: 0 });
+            return {
+              id: q.id,
+              text: q.text,
+              context: q.context,
+              video_answer_url: q.video_answer_url,
+              order: q.order,
+              answers: rawAnswers.map(a => ({ id: a.id, text: a.text })),
+            };
+          })
+        );
+        setQuizData({ quiz, questions } satisfies TakeQuizResponse);
+        setPhase('taking');
+      } catch (err) {
+        setError(getApiErrorMessage(err));
+        setPhase('error');
+      }
+    }
+    load();
   }, [quizId]);
 
   function select(questionId: number, answerId: number) {
