@@ -5,6 +5,7 @@ import { questionApi } from '../api/question';
 import { answerApi } from '../api/answer';
 import type { TakeQuizResponse, SubmitQuizResponse, QuestionResult } from '../types/quiz.types';
 import { getApiErrorMessage } from '../utils/error';
+import { PASS_THRESHOLD, ROUTES } from '../constants';
 import './take-quiz.css';
 
 type Phase = 'loading' | 'taking' | 'submitting' | 'done' | 'error';
@@ -47,18 +48,18 @@ export function TakeQuizPage() {
         setPhase('error');
       }
     }
-    load();
+    void load();
   }, [quizId]);
 
-  function select(questionId: number, answerId: number) {
-    setSelected(s => ({ ...s, [questionId]: answerId }));
+  function selectAnswer(questionId: number, answerId: number) {
+    setSelected(prev => ({ ...prev, [questionId]: answerId }));
   }
 
   const questions = quizData?.questions ?? [];
   const answeredCount = Object.keys(selected).length;
   const allAnswered = questions.length > 0 && answeredCount === questions.length;
 
-  async function submit() {
+  async function handleSubmit() {
     if (!allAnswered) return;
     setPhase('submitting');
     try {
@@ -93,7 +94,15 @@ export function TakeQuizPage() {
   }
 
   if (phase === 'done' && submitResult) {
-    return <ResultView data={submitResult} questions={quizData!} onRetry={() => navigate(0)} onBack={() => navigate(-1)} onResults={() => navigate(`/quizzes/${quizId}/results`)} />;
+    return (
+      <ResultView
+        data={submitResult}
+        questions={quizData!}
+        onRetry={() => navigate(0)}
+        onBack={() => navigate(-1)}
+        onResults={() => navigate(ROUTES.QUIZ_RESULTS(quizId))}
+      />
+    );
   }
 
   return (
@@ -114,13 +123,16 @@ export function TakeQuizPage() {
               {q.context && <p className="tq-q-context">{q.context}</p>}
               <div className="tq-answers">
                 {q.answers.map(ans => (
-                  <label key={ans.id} className={`tq-answer${chosen === ans.id ? ' tq-answer-selected' : ''}`}>
+                  <label
+                    key={ans.id}
+                    className={`tq-answer${chosen === ans.id ? ' tq-answer-selected' : ''}`}
+                  >
                     <input
                       type="radio"
                       name={`q-${q.id}`}
                       value={ans.id}
                       checked={chosen === ans.id}
-                      onChange={() => select(q.id, ans.id)}
+                      onChange={() => selectAnswer(q.id, ans.id)}
                     />
                     <span>{ans.text}</span>
                   </label>
@@ -136,7 +148,7 @@ export function TakeQuizPage() {
           )}
           <button
             className="qm-btn qm-btn-primary tq-submit-btn"
-            onClick={submit}
+            onClick={handleSubmit}
             disabled={!allAnswered || phase === 'submitting'}
           >
             {phase === 'submitting' ? 'Submitting…' : 'Submit Quiz'}
@@ -147,17 +159,17 @@ export function TakeQuizPage() {
   );
 }
 
-// ── Result view ───────────────────────────────────────────────────────────────
-
-function ResultView({ data, questions, onRetry, onBack, onResults }: {
+interface ResultViewProps {
   data: SubmitQuizResponse;
   questions: TakeQuizResponse;
   onRetry: () => void;
   onBack: () => void;
   onResults: () => void;
-}) {
+}
+
+function ResultView({ data, questions, onRetry, onBack, onResults }: ResultViewProps) {
   const pct = Math.round(data.score);
-  const passed = pct >= 60;
+  const passed = pct >= PASS_THRESHOLD;
 
   const resultMap: Record<number, QuestionResult> = {};
   for (const r of data.results) resultMap[r.question_id] = r;
@@ -183,7 +195,6 @@ function ResultView({ data, questions, onRetry, onBack, onResults }: {
             <span className="tq-stat-lbl">Total</span>
           </div>
         </div>
-
         <div className="tq-result-actions">
           <button className="qm-btn qm-btn-primary" onClick={onResults}>View History</button>
           <button className="qm-btn qm-btn-ghost" onClick={onRetry}>Retake</button>
@@ -206,14 +217,10 @@ function ResultView({ data, questions, onRetry, onBack, onResults }: {
               </div>
               <p className="tq-bd-text">{q.text}</p>
               {chosenAns && (
-                <p className="tq-bd-answer">
-                  Your answer: <strong>{chosenAns.text}</strong>
-                </p>
+                <p className="tq-bd-answer">Your answer: <strong>{chosenAns.text}</strong></p>
               )}
               {!correct && correctAns && (
-                <p className="tq-bd-correct-ans">
-                  Correct: <strong>{correctAns.text}</strong>
-                </p>
+                <p className="tq-bd-correct-ans">Correct: <strong>{correctAns.text}</strong></p>
               )}
             </div>
           );

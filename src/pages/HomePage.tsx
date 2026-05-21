@@ -1,8 +1,8 @@
-import { useAuth } from '../contexts/AuthContext';
+import { useAuthStore } from '../stores/authStore';
 import './home.css';
 
 export function HomePage() {
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
   return (
     <div className="home-page">

@@ -1,26 +1,27 @@
 import { useState, useEffect, type FormEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { authApi } from '../api';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuthStore } from '../stores/authStore';
 import { getApiErrorMessage } from '../utils/error';
+import { STORAGE_KEYS, ROUTES } from '../constants';
 import { OtpInput } from '../components/OtpInput';
 import './auth.css';
 
+type Flow = 'login' | 'register';
+
 interface LocationState {
   email: string;
-  flow: 'login' | 'register';
+  flow: Flow;
 }
 
 export function ConfirmCodePage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setAuthData } = useAuth();
+  const { setAuthData } = useAuthStore();
 
   const state = location.state as LocationState | null;
-  const email =
-    state?.email ?? sessionStorage.getItem('talan_pending_email') ?? '';
-  const flow: LocationState['flow'] =
-    state?.flow ?? (sessionStorage.getItem('talan_pending_flow') as LocationState['flow']) ?? 'login';
+  const email = state?.email ?? sessionStorage.getItem(STORAGE_KEYS.PENDING_EMAIL) ?? '';
+  const flow: Flow = state?.flow ?? (sessionStorage.getItem(STORAGE_KEYS.PENDING_FLOW) as Flow) ?? 'login';
 
   const [digits, setDigits] = useState<string[]>(Array(6).fill(''));
   const [error, setError] = useState('');
@@ -29,28 +30,27 @@ export function ConfirmCodePage() {
   const [resendMsg, setResendMsg] = useState('');
 
   useEffect(() => {
-    if (!email) navigate('/login', { replace: true });
+    if (!email) navigate(ROUTES.LOGIN, { replace: true });
   }, [email, navigate]);
 
   const code = digits.join('');
-  const isComplete = code.length === 6 && digits.every((d) => d !== '');
+  const isComplete = code.length === 6 && digits.every(d => d !== '');
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!isComplete || loading) return;
     setError('');
     setLoading(true);
-
     try {
-      sessionStorage.removeItem('talan_pending_email');
-      sessionStorage.removeItem('talan_pending_flow');
+      sessionStorage.removeItem(STORAGE_KEYS.PENDING_EMAIL);
+      sessionStorage.removeItem(STORAGE_KEYS.PENDING_FLOW);
       if (flow === 'register') {
         await authApi.verifyEmail({ email, code });
-        navigate('/login', { replace: true, state: { verified: true } });
+        navigate(ROUTES.LOGIN, { replace: true, state: { verified: true } });
       } else {
         const { data } = await authApi.verifyLogin({ email, code });
         setAuthData(data);
-        navigate('/', { replace: true });
+        navigate(ROUTES.HOME, { replace: true });
       }
     } catch (err) {
       setError(getApiErrorMessage(err));
@@ -89,17 +89,13 @@ export function ConfirmCodePage() {
 
           <OtpInput digits={digits} onChange={setDigits} disabled={loading} />
 
-          <button
-            className="auth-btn"
-            type="submit"
-            disabled={!isComplete || loading}
-          >
+          <button className="auth-btn" type="submit" disabled={!isComplete || loading}>
             {loading ? 'Verifying…' : 'Verify code'}
           </button>
         </form>
 
         <div className="auth-footer">
-          Didn't receive a code?{' '}
+          Didn&apos;t receive a code?{' '}
           <button
             className="auth-link-btn"
             type="button"

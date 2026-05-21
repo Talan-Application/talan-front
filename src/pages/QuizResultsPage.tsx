@@ -3,15 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { quizApi } from '../api/quiz';
 import type { QuizResultSummary } from '../types/quiz.types';
 import { getApiErrorMessage } from '../utils/error';
+import { formatDateTime } from '../utils/format';
+import { PASS_THRESHOLD, ROUTES } from '../constants';
 import './take-quiz.css';
-
-function formatDate(ts: number) {
-  const ms = ts > 1e12 ? ts : ts * 1000;
-  return new Date(ms).toLocaleString('en-US', {
-    year: 'numeric', month: 'short', day: 'numeric',
-    hour: '2-digit', minute: '2-digit',
-  });
-}
 
 export function QuizResultsPage() {
   const { id } = useParams<{ id: string }>();
@@ -23,8 +17,9 @@ export function QuizResultsPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    quizApi.getResults(quizId)
-      .then(data => { setResults(data.results ?? []); })
+    quizApi
+      .getResults(quizId)
+      .then(data => setResults(data.results ?? []))
       .catch(err => setError(getApiErrorMessage(err)))
       .finally(() => setLoading(false));
   }, [quizId]);
@@ -34,7 +29,10 @@ export function QuizResultsPage() {
       <div className="tq-header">
         <button className="qm-back-btn" onClick={() => navigate(-1)}>← Back</button>
         <h1 className="tq-quiz-title">Quiz Results</h1>
-        <button className="qm-btn qm-btn-primary qm-btn-sm" onClick={() => navigate(`/quizzes/${quizId}/take`)}>
+        <button
+          className="qm-btn qm-btn-primary qm-btn-sm"
+          onClick={() => navigate(ROUTES.TAKE_QUIZ(quizId))}
+        >
           Take Quiz
         </button>
       </div>
@@ -48,7 +46,10 @@ export function QuizResultsPage() {
         {!loading && !error && results.length === 0 && (
           <div className="qm-empty-state">
             <p>No attempts yet.</p>
-            <button className="qm-btn qm-btn-primary" onClick={() => navigate(`/quizzes/${quizId}/take`)}>
+            <button
+              className="qm-btn qm-btn-primary"
+              onClick={() => navigate(ROUTES.TAKE_QUIZ(quizId))}
+            >
               Take Quiz Now
             </button>
           </div>
@@ -57,7 +58,9 @@ export function QuizResultsPage() {
         {!loading && results.length > 0 && (
           <div className="qm-section">
             <div className="qm-section-head">
-              <span className="qm-count">{results.length} attempt{results.length !== 1 ? 's' : ''}</span>
+              <span className="qm-count">
+                {results.length} attempt{results.length !== 1 ? 's' : ''}
+              </span>
             </div>
             <table className="qm-table">
               <thead>
@@ -72,7 +75,7 @@ export function QuizResultsPage() {
               <tbody>
                 {results.map((r, idx) => {
                   const pct = Math.round(r.score);
-                  const passed = pct >= 60;
+                  const passed = pct >= PASS_THRESHOLD;
                   return (
                     <tr key={r.id}>
                       <td className="qm-td-id">{idx + 1}</td>
@@ -83,7 +86,7 @@ export function QuizResultsPage() {
                       </td>
                       <td>{r.correct_answers}</td>
                       <td>{r.total_questions}</td>
-                      <td className="qm-td-desc">{formatDate(r.submitted_at)}</td>
+                      <td className="qm-td-desc">{formatDateTime(r.submitted_at)}</td>
                     </tr>
                   );
                 })}
