@@ -10,12 +10,16 @@ export const PAGE_SIZES = [6, 12, 24] as const;
 
 export const PASS_THRESHOLD = 60;
 
+export const STAFF_ROLES = ['admin', 'curator', 'teacher'] as const;
+export type StaffRole = typeof STAFF_ROLES[number];
+
 export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
   REGISTER: '/register',
   CONFIRM_CODE: '/confirm-code',
   QUIZZES: '/quizzes',
+  STUDENT_QUIZZES: '/student/quizzes',
   TAKE_QUIZ: (id: number) => `/quizzes/${id}/take`,
   QUIZ_RESULTS: (id: number) => `/quizzes/${id}/results`,
 } as const;

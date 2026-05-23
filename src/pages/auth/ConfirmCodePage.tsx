@@ -1,10 +1,10 @@
 import { useState, useEffect, type FormEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { authApi } from '../api';
-import { useAuthStore } from '../stores/authStore';
-import { getApiErrorMessage } from '../utils/error';
-import { STORAGE_KEYS, ROUTES } from '../constants';
-import { OtpInput } from '../components/OtpInput';
+import { authApi } from '../../api';
+import { useAuthStore } from '../../stores/authStore';
+import { getApiErrorMessage } from '../../utils/error';
+import { STORAGE_KEYS, ROUTES } from '../../constants';
+import { OtpInput } from '../../components/OtpInput';
 import './auth.css';
 
 type Flow = 'login' | 'register';

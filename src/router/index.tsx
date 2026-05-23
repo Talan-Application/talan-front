@@ -1,13 +1,22 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import { LoginPage } from '../pages/LoginPage';
-import { RegisterPage } from '../pages/RegisterPage';
-import { ConfirmCodePage } from '../pages/ConfirmCodePage';
-import { HomePage } from '../pages/HomePage';
-import { QuizPage } from '../pages/QuizPage';
-import { TakeQuizPage } from '../pages/TakeQuizPage';
-import { QuizResultsPage } from '../pages/QuizResultsPage';
+import { LoginPage } from '../pages/auth/LoginPage';
+import { RegisterPage } from '../pages/auth/RegisterPage';
+import { ConfirmCodePage } from '../pages/auth/ConfirmCodePage';
+import { StaffHomePage } from '../pages/staff/home/StaffHomePage';
+import { QuizManagementPage } from '../pages/staff/quiz/QuizManagementPage';
+import { StudentHomePage } from '../pages/student/home/StudentHomePage';
+import { StudentQuizListPage } from '../pages/student/quiz/StudentQuizListPage';
+import { TakeQuizPage } from '../pages/student/quiz/TakeQuizPage';
+import { QuizResultsPage } from '../pages/student/quiz/QuizResultsPage';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import { Layout } from '../components/Layout';
+import { useAuthStore } from '../stores/authStore';
+import { STAFF_ROLES } from '../constants';
+
+function RoleBasedHome() {
+  const { user } = useAuthStore();
+  return user?.role === 'student' ? <StudentHomePage /> : <StaffHomePage />;
+}
 
 export const router = createBrowserRouter([
   { path: '/login', element: <LoginPage /> },
@@ -18,7 +27,7 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Layout>
-          <HomePage />
+          <RoleBasedHome />
         </Layout>
       </ProtectedRoute>
     ),
@@ -26,9 +35,19 @@ export const router = createBrowserRouter([
   {
     path: '/quizzes',
     element: (
-      <ProtectedRoute allowedRoles={['curator', 'teacher', 'admin']}>
+      <ProtectedRoute allowedRoles={[...STAFF_ROLES]}>
         <Layout>
-          <QuizPage />
+          <QuizManagementPage />
+        </Layout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/student/quizzes',
+    element: (
+      <ProtectedRoute allowedRoles={['student']}>
+        <Layout>
+          <StudentQuizListPage />
         </Layout>
       </ProtectedRoute>
     ),

@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { quizApi } from '../api/quiz';
-import { questionApi } from '../api/question';
-import { answerApi } from '../api/answer';
-import type { TakeQuizResponse, SubmitQuizResponse, QuestionResult } from '../types/quiz.types';
-import { getApiErrorMessage } from '../utils/error';
-import { PASS_THRESHOLD, ROUTES } from '../constants';
+import { quizApi } from '../../../api/quiz';
+import { questionApi } from '../../../api/question';
+import { answerApi } from '../../../api/answer';
+import type { TakeQuizResponse, SubmitQuizResponse, QuestionResult } from '../../../types/quiz.types';
+import { getApiErrorMessage } from '../../../utils/error';
+import { PASS_THRESHOLD, ROUTES } from '../../../constants';
 import './take-quiz.css';
 
 type Phase = 'loading' | 'taking' | 'submitting' | 'done' | 'error';
