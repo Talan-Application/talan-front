@@ -17,8 +17,8 @@ function statusClass(status: string): string {
 
 interface Props {
   item: Quiz;
-  onEdit: () => void;
-  onDelete: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 export function QuizCard({ item, onEdit, onDelete }: Props) {
@@ -52,12 +52,16 @@ export function QuizCard({ item, onEdit, onDelete }: Props) {
         <button className="qm-btn qm-btn-sm qm-btn-ghost" onClick={() => navigate(ROUTES.QUIZ_RESULTS(item.id))}>
           Results
         </button>
-        <button className="qm-btn qm-btn-sm qm-btn-ghost" onClick={onEdit}>
-          Edit
-        </button>
-        <button className="qm-btn qm-btn-sm qm-btn-danger" onClick={onDelete}>
-          Delete
-        </button>
+        {onEdit && (
+          <button className="qm-btn qm-btn-sm qm-btn-ghost" onClick={onEdit}>
+            Edit
+          </button>
+        )}
+        {onDelete && (
+          <button className="qm-btn qm-btn-sm qm-btn-danger" onClick={onDelete}>
+            Delete
+          </button>
+        )}
       </div>
     </div>
   );

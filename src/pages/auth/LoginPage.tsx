@@ -1,8 +1,8 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { authApi } from '../api';
-import { getApiErrorMessage } from '../utils/error';
-import { STORAGE_KEYS, ROUTES } from '../constants';
+import { authApi } from '../../api';
+import { getApiErrorMessage } from '../../utils/error';
+import { STORAGE_KEYS, ROUTES } from '../../constants';
 import './auth.css';
 
 function validateEmail(value: string): string {

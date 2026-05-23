@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { quizApi } from '../api/quiz';
-import type { QuizResultSummary } from '../types/quiz.types';
-import { getApiErrorMessage } from '../utils/error';
-import { formatDateTime } from '../utils/format';
-import { PASS_THRESHOLD, ROUTES } from '../constants';
+import { quizApi } from '../../../api/quiz';
+import type { QuizResultSummary } from '../../../types/quiz.types';
+import { getApiErrorMessage } from '../../../utils/error';
+import { formatDateTime } from '../../../utils/format';
+import { PASS_THRESHOLD, ROUTES } from '../../../constants';
 import './take-quiz.css';
 
 export function QuizResultsPage() {

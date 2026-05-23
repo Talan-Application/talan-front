@@ -1,7 +1,7 @@
-import { useAuthStore } from '../stores/authStore';
-import './home.css';
+import { useAuthStore } from '../../../stores/authStore';
+import '../../home.css';
 
-export function HomePage() {
+export function StaffHomePage() {
   const { user } = useAuthStore();
 
   return (

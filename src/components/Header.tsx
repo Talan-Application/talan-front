@@ -5,13 +5,19 @@ import { authApi } from '../api';
 import { ROUTES } from '../constants';
 import './header.css';
 
-const NAV_LINKS = [
+const STAFF_NAV = [
   { to: ROUTES.HOME, label: 'Home' },
   { to: ROUTES.QUIZZES, label: 'Quizzes' },
 ];
 
+const STUDENT_NAV = [
+  { to: ROUTES.HOME, label: 'Home' },
+  { to: ROUTES.STUDENT_QUIZZES, label: 'My Quizzes' },
+];
+
 export function Header() {
   const { user, isAuthenticated, logout } = useAuthStore();
+  const navLinks = user?.role === 'student' ? STUDENT_NAV : STAFF_NAV;
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -45,7 +51,7 @@ export function Header() {
       </div>
 
       <nav className="header-nav">
-        {NAV_LINKS.map(({ to, label }) => (
+        {navLinks.map(({ to, label }) => (
           <NavLink
             key={to}
             to={to}

@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { quizApi } from '../api';
-import { useQuizStore } from '../stores/quizStore';
-import type { Quiz } from '../types/quiz.types';
-import { PAGE_SIZES, ROUTES } from '../constants';
-import { QuizCard } from '../components/quiz/QuizCard';
-import { QuizFormModal, type QuizFormData } from '../components/quiz/QuizFormModal';
-import { AddQuestionsModal } from '../components/quiz/AddQuestionsModal';
-import { EditQuestionsModal } from '../components/quiz/EditQuestionsModal';
-import './quiz.css';
+import { quizApi } from '../../../api';
+import { useQuizStore } from '../../../stores/quizStore';
+import type { Quiz } from '../../../types/quiz.types';
+import { PAGE_SIZES, ROUTES } from '../../../constants';
+import { QuizCard } from '../../../components/quiz/QuizCard';
+import { QuizFormModal, type QuizFormData } from '../../../components/quiz/QuizFormModal';
+import { AddQuestionsModal } from '../../../components/quiz/AddQuestionsModal';
+import { EditQuestionsModal } from '../../../components/quiz/EditQuestionsModal';
+import '../../quiz.css';
 
 type ModalState =
   | { mode: 'create-step1' }
@@ -24,7 +24,7 @@ const BLANK_FORM: QuizFormData = {
   subject_id: '',
 };
 
-export function QuizPage() {
+export function QuizManagementPage() {
   const navigate = useNavigate();
   const { items, loading, error, limit, offset, hasMore, setLimit, setOffset, fetchQuizzes } = useQuizStore();
   const [modal, setModal] = useState<ModalState | null>(null);
