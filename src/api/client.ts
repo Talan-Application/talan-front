@@ -1,6 +1,7 @@
 import axios from 'axios';
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { tokenStorage } from '../utils/token';
+import { i18n } from '../i18n';
 
 declare module 'axios' {
   interface InternalAxiosRequestConfig {
@@ -19,6 +20,7 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = tokenStorage.getAccess();
   if (token) config.headers['Authorization'] = `Bearer ${token}`;
+  config.headers['Accept-Language'] = i18n.language ?? 'ru';
   return config;
 });
 
