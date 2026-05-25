@@ -19,6 +19,7 @@ export const ROUTES = {
   REGISTER: '/register',
   CONFIRM_CODE: '/confirm-code',
   QUIZZES: '/quizzes',
+  COMMON_SUBJECTS: '/common-subjects',
   STUDENT_QUIZZES: '/student/quizzes',
   TAKE_QUIZ: (id: number) => `/quizzes/${id}/take`,
   QUIZ_RESULTS: (id: number) => `/quizzes/${id}/results`,

@@ -5,7 +5,7 @@ export interface Quiz {
   author_id: number;
   status: string;
   type: string;
-  subject_id: number;
+  common_subject_id: number;
   created_at: number;
   updated_at: number;
 }
@@ -65,14 +65,14 @@ export interface CreateQuizRequest {
   language: string;
   status: string;
   type: string;
-  subject_id: number;
+  common_subject_id: number;
 }
 export interface UpdateQuizRequest {
   title?: string;
   language?: string;
   status?: string;
   type?: string;
-  subject_id?: number;
+  common_subject_id?: number;
 }
 export interface CreateQuestionRequest {
   quiz_id: number;

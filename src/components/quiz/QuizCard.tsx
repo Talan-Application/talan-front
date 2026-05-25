@@ -37,8 +37,8 @@ export function QuizCard({ item, onEdit, onDelete }: Props) {
           <dd>{item.language || '—'}</dd>
         </div>
         <div className="quiz-card-row">
-          <dt>Subject ID</dt>
-          <dd>{item.subject_id}</dd>
+          <dt>Common Subject ID</dt>
+          <dd>{item.common_subject_id}</dd>
         </div>
         <div className="quiz-card-row">
           <dt>Created</dt>

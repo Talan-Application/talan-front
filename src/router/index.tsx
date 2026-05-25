@@ -4,6 +4,7 @@ import { RegisterPage } from '../pages/auth/RegisterPage';
 import { ConfirmCodePage } from '../pages/auth/ConfirmCodePage';
 import { StaffHomePage } from '../pages/staff/home/StaffHomePage';
 import { QuizManagementPage } from '../pages/staff/quiz/QuizManagementPage';
+import { CommonSubjectManagementPage } from '../pages/staff/common_subject/CommonSubjectManagementPage';
 import { StudentHomePage } from '../pages/student/home/StudentHomePage';
 import { StudentQuizListPage } from '../pages/student/quiz/StudentQuizListPage';
 import { TakeQuizPage } from '../pages/student/quiz/TakeQuizPage';
@@ -38,6 +39,16 @@ export const router = createBrowserRouter([
       <ProtectedRoute allowedRoles={[...STAFF_ROLES]}>
         <Layout>
           <QuizManagementPage />
+        </Layout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/common-subjects',
+    element: (
+      <ProtectedRoute allowedRoles={[...STAFF_ROLES]}>
+        <Layout>
+          <CommonSubjectManagementPage />
         </Layout>
       </ProtectedRoute>
     ),

@@ -1,8 +1,11 @@
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../stores/authStore';
+import { ROUTES } from '../../../constants';
 import '../../home.css';
 
 export function StaffHomePage() {
   const { user } = useAuthStore();
+  const navigate = useNavigate();
 
   return (
     <div className="home-page">
@@ -16,21 +19,27 @@ export function StaffHomePage() {
       </div>
 
       <div className="home-cards">
-        <div className="home-stat-card">
+        <div
+          className="home-stat-card"
+          role="button"
+          tabIndex={0}
+          onClick={() => navigate(ROUTES.QUIZZES)}
+          onKeyDown={e => e.key === 'Enter' && navigate(ROUTES.QUIZZES)}
+          style={{ cursor: 'pointer' }}
+        >
           <span className="home-stat-icon">📝</span>
           <p className="home-stat-label">Quizzes</p>
         </div>
-        <div className="home-stat-card">
-          <span className="home-stat-icon">📚</span>
-          <p className="home-stat-label">Courses</p>
-        </div>
-        <div className="home-stat-card">
+        <div
+          className="home-stat-card"
+          role="button"
+          tabIndex={0}
+          onClick={() => navigate(ROUTES.COMMON_SUBJECTS)}
+          onKeyDown={e => e.key === 'Enter' && navigate(ROUTES.COMMON_SUBJECTS)}
+          style={{ cursor: 'pointer' }}
+        >
           <span className="home-stat-icon">🎓</span>
-          <p className="home-stat-label">Subjects</p>
-        </div>
-        <div className="home-stat-card">
-          <span className="home-stat-icon">👥</span>
-          <p className="home-stat-label">Users</p>
+          <p className="home-stat-label">Common Subjects</p>
         </div>
       </div>
     </div>

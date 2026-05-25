@@ -8,6 +8,7 @@ import './header.css';
 const STAFF_NAV = [
   { to: ROUTES.HOME, label: 'Home' },
   { to: ROUTES.QUIZZES, label: 'Quizzes' },
+  { to: ROUTES.COMMON_SUBJECTS, label: 'Common Subjects' },
 ];
 
 const STUDENT_NAV = [

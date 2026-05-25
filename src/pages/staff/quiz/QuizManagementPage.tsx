@@ -21,7 +21,7 @@ const BLANK_FORM: QuizFormData = {
   language: '',
   status: 'draft',
   type: '',
-  subject_id: '',
+  common_subject_id: '',
 };
 
 export function QuizManagementPage() {
@@ -51,7 +51,7 @@ export function QuizManagementPage() {
       language: item.language,
       status: item.status,
       type: item.type,
-      subject_id: String(item.subject_id),
+      common_subject_id: String(item.common_subject_id),
     });
     setFormError('');
     setModal({ mode: 'edit-step1', item });
@@ -67,7 +67,7 @@ export function QuizManagementPage() {
         language: form.language,
         status: form.status,
         type: form.type,
-        subject_id: Number(form.subject_id),
+        common_subject_id: Number(form.common_subject_id),
       });
       await fetchQuizzes();
       setModal({ mode: 'create-step2', quiz });
@@ -88,7 +88,7 @@ export function QuizManagementPage() {
         language: form.language,
         status: form.status,
         type: form.type,
-        subject_id: Number(form.subject_id),
+        common_subject_id: Number(form.common_subject_id),
       });
       await fetchQuizzes();
       setModal({
@@ -99,7 +99,7 @@ export function QuizManagementPage() {
           language: form.language,
           status: form.status,
           type: form.type,
-          subject_id: Number(form.subject_id),
+          common_subject_id: Number(form.common_subject_id),
         },
       });
     } catch {

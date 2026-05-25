@@ -5,7 +5,7 @@ export interface QuizFormData {
   language: string;
   status: string;
   type: string;
-  subject_id: string;
+  common_subject_id: string;
 }
 
 interface Props {
@@ -80,12 +80,12 @@ export function QuizFormModal({ title, form, onFormChange, error, saving, submit
             />
           </div>
           <div className="qm-field">
-            <label className="qm-label">Subject ID</label>
+            <label className="qm-label">Common Subject ID</label>
             <input
               className="qm-input"
               type="number"
-              value={form.subject_id}
-              onChange={update('subject_id')}
+              value={form.common_subject_id}
+              onChange={update('common_subject_id')}
               placeholder="0"
             />
           </div>
