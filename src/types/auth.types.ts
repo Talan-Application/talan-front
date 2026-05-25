@@ -5,6 +5,7 @@ export interface User {
   last_name: string;
   middle_name?: string;
   role?: string;
+  preferred_locale?: string;
 }
 
 export interface RegisterRequest {

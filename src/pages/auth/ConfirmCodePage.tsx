@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { authApi } from '../../api';
 import { useAuthStore } from '../../stores/authStore';
+import { setLanguage, type LangCode, LANGUAGES } from '../../i18n';
 import { getApiErrorMessage } from '../../utils/error';
 import { STORAGE_KEYS, ROUTES } from '../../constants';
 import { OtpInput } from '../../components/OtpInput';
@@ -52,6 +53,10 @@ export function ConfirmCodePage() {
       } else {
         const { data } = await authApi.verifyLogin({ email, code });
         setAuthData(data);
+        const locale = data.user.preferred_locale;
+        if (locale && LANGUAGES.some(l => l.code === locale)) {
+          setLanguage(locale as LangCode);
+        }
         navigate(ROUTES.HOME, { replace: true });
       }
     } catch (err) {

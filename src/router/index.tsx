@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { LoginPage } from '../pages/auth/LoginPage';
 import { RegisterPage } from '../pages/auth/RegisterPage';
 import { ConfirmCodePage } from '../pages/auth/ConfirmCodePage';
+import { LandingPage } from '../pages/LandingPage';
 import { StaffHomePage } from '../pages/staff/home/StaffHomePage';
 import { QuizManagementPage } from '../pages/staff/quiz/QuizManagementPage';
 import { CommonSubjectManagementPage } from '../pages/staff/common_subject/CommonSubjectManagementPage';
@@ -20,11 +21,12 @@ function RoleBasedHome() {
 }
 
 export const router = createBrowserRouter([
+  { path: '/', element: <LandingPage /> },
   { path: '/login', element: <LoginPage /> },
   { path: '/register', element: <RegisterPage /> },
   { path: '/confirm-code', element: <ConfirmCodePage /> },
   {
-    path: '/',
+    path: '/home',
     element: (
       <ProtectedRoute>
         <Layout>
@@ -83,5 +85,5 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-  { path: '*', element: <Navigate to="/login" replace /> },
+  { path: '*', element: <Navigate to="/" replace /> },
 ]);

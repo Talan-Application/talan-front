@@ -14,7 +14,8 @@ export const STAFF_ROLES = ['admin', 'curator', 'teacher'] as const;
 export type StaffRole = typeof STAFF_ROLES[number];
 
 export const ROUTES = {
-  HOME: '/',
+  HOME: '/home',
+  LANDING: '/',
   LOGIN: '/login',
   REGISTER: '/register',
   CONFIRM_CODE: '/confirm-code',
