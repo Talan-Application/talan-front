@@ -76,24 +76,38 @@
   justify-content: flex-end;
 }
 
-.header-lang-btn {
+.header-lang-switcher {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.4rem 0.75rem;
+  gap: 0.25rem;
   border: 1px solid var(--border);
   border-radius: 8px;
+  overflow: hidden;
+  padding: 2px;
+}
+
+.header-lang-btn {
+  padding: 0.25rem 0.55rem;
+  border: none;
+  border-radius: 6px;
   background: transparent;
   color: var(--text);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background 0.15s, color 0.15s;
+  line-height: 1.4;
 }
 
 .header-lang-btn:hover {
-  background: var(--code-bg);
-  border-color: #c5c4c8;
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.header-lang-btn.active {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
 }
 
 /* Profile */

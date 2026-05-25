@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { questionApi, answerApi } from '../../api';
 import type { Quiz, Question } from '../../types/quiz.types';
 import { Modal } from './Modal';
@@ -34,6 +35,7 @@ interface Props {
 }
 
 export function AddQuestionsModal({ quiz, onClose }: Props) {
+  const { t } = useTranslation();
   const [saved, setSaved] = useState<Question[]>([]);
   const [draft, setDraft] = useState<QuestionDraft>(BLANK_DRAFT);
   const [saving, setSaving] = useState(false);
@@ -75,19 +77,19 @@ export function AddQuestionsModal({ quiz, onClose }: Props) {
       setSaved(prev => [...prev, question]);
       setDraft(BLANK_DRAFT);
     } catch {
-      setError('Failed to add question. Please try again.');
+      setError(t('quiz.questions.addFailed'));
     } finally {
       setSaving(false);
     }
   }
 
   return (
-    <Modal title={`Add Questions — ${quiz.title}`} onClose={onClose} wide>
+    <Modal title={t('quiz.questions.addTitle', { title: quiz.title })} onClose={onClose} wide>
       <div className="qm-step2-body">
         {saved.length > 0 && (
           <div className="qm-added-questions">
             <p className="qm-added-label">
-              {saved.length} question{saved.length !== 1 ? 's' : ''} added
+              {t('quiz.questions.questionsAdded', { count: saved.length })}
             </p>
             {saved.map((q, i) => (
               <div key={q.id} className="qm-added-question-item">
@@ -100,29 +102,29 @@ export function AddQuestionsModal({ quiz, onClose }: Props) {
 
         <div className="qm-form">
           <div className="qm-field">
-            <label className="qm-label">Question text *</label>
+            <label className="qm-label">{t('quiz.questions.questionText')}</label>
             <textarea
               className="qm-input qm-textarea"
               rows={2}
               value={draft.text}
               onChange={e => setDraft(d => ({ ...d, text: e.target.value }))}
-              placeholder="Enter question text"
+              placeholder={t('quiz.questions.questionPlaceholder')}
               autoFocus
             />
           </div>
 
           <div className="qm-field-row">
             <div className="qm-field">
-              <label className="qm-label">Context</label>
+              <label className="qm-label">{t('quiz.questions.context')}</label>
               <input
                 className="qm-input"
                 value={draft.context}
                 onChange={e => setDraft(d => ({ ...d, context: e.target.value }))}
-                placeholder="Optional context"
+                placeholder={t('quiz.questions.contextPlaceholder')}
               />
             </div>
             <div className="qm-field qm-field-narrow">
-              <label className="qm-label">Order</label>
+              <label className="qm-label">{t('quiz.questions.order')}</label>
               <input
                 className="qm-input"
                 type="number"
@@ -135,7 +137,7 @@ export function AddQuestionsModal({ quiz, onClose }: Props) {
           </div>
 
           <div className="qm-field">
-            <label className="qm-label">Answer options</label>
+            <label className="qm-label">{t('quiz.questions.answerOptions')}</label>
             <div className="qm-answers-list">
               {draft.answers.map((ans, i) => (
                 <AnswerField
@@ -154,7 +156,7 @@ export function AddQuestionsModal({ quiz, onClose }: Props) {
                 className="qm-btn qm-btn-ghost qm-btn-sm qm-add-answer-btn"
                 onClick={addAnswerOption}
               >
-                + Add answer option
+                {t('quiz.questions.addAnswerOption')}
               </button>
             </div>
           </div>
@@ -169,10 +171,10 @@ export function AddQuestionsModal({ quiz, onClose }: Props) {
           onClick={addQuestion}
           disabled={saving || !draft.text.trim()}
         >
-          {saving ? 'Adding…' : '+ Add Question'}
+          {saving ? t('quiz.questions.adding') : t('quiz.questions.addQuestion')}
         </button>
         <button className="qm-btn qm-btn-ghost" onClick={onClose}>
-          Done
+          {t('quiz.questions.done')}
         </button>
       </div>
     </Modal>

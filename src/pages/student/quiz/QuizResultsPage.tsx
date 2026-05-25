@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { quizApi } from '../../../api/quiz';
 import type { QuizResultSummary } from '../../../types/quiz.types';
 import { getApiErrorMessage } from '../../../utils/error';
@@ -8,6 +9,7 @@ import { PASS_THRESHOLD, ROUTES } from '../../../constants';
 import './take-quiz.css';
 
 export function QuizResultsPage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const quizId = Number(id);
@@ -27,30 +29,30 @@ export function QuizResultsPage() {
   return (
     <div className="tq-page">
       <div className="tq-header">
-        <button className="qm-back-btn" onClick={() => navigate(-1)}>← Back</button>
-        <h1 className="tq-quiz-title">Quiz Results</h1>
+        <button className="qm-back-btn" onClick={() => navigate(-1)}>{t('common.back')}</button>
+        <h1 className="tq-quiz-title">{t('quiz.results.title')}</h1>
         <button
           className="qm-btn qm-btn-primary qm-btn-sm"
           onClick={() => navigate(ROUTES.TAKE_QUIZ(quizId))}
         >
-          Take Quiz
+          {t('quiz.results.takeQuiz')}
         </button>
       </div>
 
       <div className="tq-content">
         {loading && (
-          <div className="tq-loading"><span className="qm-spinner" /> Loading results…</div>
+          <div className="tq-loading"><span className="qm-spinner" /> {t('quiz.results.loading')}</div>
         )}
         {error && <p className="qm-error">{error}</p>}
 
         {!loading && !error && results.length === 0 && (
           <div className="qm-empty-state">
-            <p>No attempts yet.</p>
+            <p>{t('quiz.results.noAttempts')}</p>
             <button
               className="qm-btn qm-btn-primary"
               onClick={() => navigate(ROUTES.TAKE_QUIZ(quizId))}
             >
-              Take Quiz Now
+              {t('quiz.results.takeQuizNow')}
             </button>
           </div>
         )}
@@ -59,17 +61,17 @@ export function QuizResultsPage() {
           <div className="qm-section">
             <div className="qm-section-head">
               <span className="qm-count">
-                {results.length} attempt{results.length !== 1 ? 's' : ''}
+                {t('quiz.results.attempts', { count: results.length })}
               </span>
             </div>
             <table className="qm-table">
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Score</th>
-                  <th>Correct</th>
-                  <th>Total</th>
-                  <th>Submitted</th>
+                  <th>{t('quiz.results.score')}</th>
+                  <th>{t('quiz.results.correct')}</th>
+                  <th>{t('quiz.results.total')}</th>
+                  <th>{t('quiz.results.submitted')}</th>
                 </tr>
               </thead>
               <tbody>

@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../../stores/authStore';
 import { ROUTES } from '../../../constants';
 import '../../home.css';
 
 export function StaffHomePage() {
+  const { t } = useTranslation();
   const { user } = useAuthStore();
   const navigate = useNavigate();
 
@@ -11,11 +13,9 @@ export function StaffHomePage() {
     <div className="home-page">
       <div className="home-hero">
         <h1 className="home-title">
-          Welcome back{user ? `, ${user.first_name}` : ''}!
+          {t('home.welcomeBack', { name: user ? `, ${user.first_name}` : '' })}
         </h1>
-        <p className="home-subtitle">
-          Manage your quizzes, courses, and learning content all in one place.
-        </p>
+        <p className="home-subtitle">{t('home.staff.subtitle')}</p>
       </div>
 
       <div className="home-cards">
@@ -28,7 +28,7 @@ export function StaffHomePage() {
           style={{ cursor: 'pointer' }}
         >
           <span className="home-stat-icon">📝</span>
-          <p className="home-stat-label">Quizzes</p>
+          <p className="home-stat-label">{t('home.staff.quizzes')}</p>
         </div>
         <div
           className="home-stat-card"
@@ -39,7 +39,7 @@ export function StaffHomePage() {
           style={{ cursor: 'pointer' }}
         >
           <span className="home-stat-icon">🎓</span>
-          <p className="home-stat-label">Common Subjects</p>
+          <p className="home-stat-label">{t('home.staff.commonSubjects')}</p>
         </div>
       </div>
     </div>

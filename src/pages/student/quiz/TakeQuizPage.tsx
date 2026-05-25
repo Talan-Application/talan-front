@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { quizApi } from '../../../api/quiz';
 import { questionApi } from '../../../api/question';
 import { answerApi } from '../../../api/answer';
@@ -11,6 +12,7 @@ import './take-quiz.css';
 type Phase = 'loading' | 'taking' | 'submitting' | 'done' | 'error';
 
 export function TakeQuizPage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const quizId = Number(id);
@@ -77,7 +79,7 @@ export function TakeQuizPage() {
   if (phase === 'loading') {
     return (
       <div className="tq-page">
-        <div className="tq-loading"><span className="qm-spinner" /> Loading quiz…</div>
+        <div className="tq-loading"><span className="qm-spinner" /> {t('quiz.take.loading')}</div>
       </div>
     );
   }
@@ -87,7 +89,7 @@ export function TakeQuizPage() {
       <div className="tq-page">
         <div className="tq-loading tq-error">{error}</div>
         <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-          <button className="qm-btn qm-btn-ghost" onClick={() => navigate(-1)}>Go back</button>
+          <button className="qm-btn qm-btn-ghost" onClick={() => navigate(-1)}>{t('quiz.take.goBack')}</button>
         </div>
       </div>
     );
@@ -108,9 +110,9 @@ export function TakeQuizPage() {
   return (
     <div className="tq-page">
       <div className="tq-header">
-        <button className="qm-back-btn" onClick={() => navigate(-1)}>← Back</button>
+        <button className="qm-back-btn" onClick={() => navigate(-1)}>{t('common.back')}</button>
         <h1 className="tq-quiz-title">{quizData?.quiz.title}</h1>
-        <span className="tq-progress">{answeredCount} / {questions.length} answered</span>
+        <span className="tq-progress">{t('quiz.take.answered', { answered: answeredCount, total: questions.length })}</span>
       </div>
 
       <div className="tq-content">
@@ -118,7 +120,7 @@ export function TakeQuizPage() {
           const chosen = selected[q.id];
           return (
             <div key={q.id} className="tq-question">
-              <p className="tq-q-num">Question {idx + 1}</p>
+              <p className="tq-q-num">{t('quiz.take.question', { number: idx + 1 })}</p>
               <p className="tq-q-text">{q.text}</p>
               {q.context && <p className="tq-q-context">{q.context}</p>}
               <div className="tq-answers">
@@ -144,14 +146,14 @@ export function TakeQuizPage() {
 
         <div className="tq-footer">
           {!allAnswered && (
-            <p className="tq-hint">{questions.length - answeredCount} question(s) remaining</p>
+            <p className="tq-hint">{t('quiz.take.remaining', { count: questions.length - answeredCount })}</p>
           )}
           <button
             className="qm-btn qm-btn-primary tq-submit-btn"
             onClick={handleSubmit}
             disabled={!allAnswered || phase === 'submitting'}
           >
-            {phase === 'submitting' ? 'Submitting…' : 'Submit Quiz'}
+            {phase === 'submitting' ? t('quiz.take.submitting') : t('quiz.take.submit')}
           </button>
         </div>
       </div>
@@ -168,6 +170,7 @@ interface ResultViewProps {
 }
 
 function ResultView({ data, questions, onRetry, onBack, onResults }: ResultViewProps) {
+  const { t } = useTranslation();
   const pct = Math.round(data.score);
   const passed = pct >= PASS_THRESHOLD;
 
@@ -179,31 +182,31 @@ function ResultView({ data, questions, onRetry, onBack, onResults }: ResultViewP
       <div className="tq-result-card">
         <div className={`tq-score-circle ${passed ? 'tq-score-pass' : 'tq-score-fail'}`}>
           <span className="tq-score-pct">{pct}%</span>
-          <span className="tq-score-label">{passed ? 'Passed' : 'Failed'}</span>
+          <span className="tq-score-label">{passed ? t('quiz.take.passed') : t('quiz.take.failed')}</span>
         </div>
         <div className="tq-score-stats">
           <div className="tq-stat">
             <span className="tq-stat-val">{data.correct_answers}</span>
-            <span className="tq-stat-lbl">Correct</span>
+            <span className="tq-stat-lbl">{t('quiz.take.correct')}</span>
           </div>
           <div className="tq-stat">
             <span className="tq-stat-val">{data.total_questions - data.correct_answers}</span>
-            <span className="tq-stat-lbl">Wrong</span>
+            <span className="tq-stat-lbl">{t('quiz.take.wrong')}</span>
           </div>
           <div className="tq-stat">
             <span className="tq-stat-val">{data.total_questions}</span>
-            <span className="tq-stat-lbl">Total</span>
+            <span className="tq-stat-lbl">{t('quiz.take.total')}</span>
           </div>
         </div>
         <div className="tq-result-actions">
-          <button className="qm-btn qm-btn-primary" onClick={onResults}>View History</button>
-          <button className="qm-btn qm-btn-ghost" onClick={onRetry}>Retake</button>
-          <button className="qm-btn qm-btn-ghost" onClick={onBack}>Back</button>
+          <button className="qm-btn qm-btn-primary" onClick={onResults}>{t('quiz.take.viewHistory')}</button>
+          <button className="qm-btn qm-btn-ghost" onClick={onRetry}>{t('quiz.take.retake')}</button>
+          <button className="qm-btn qm-btn-ghost" onClick={onBack}>{t('quiz.take.back')}</button>
         </div>
       </div>
 
       <div className="tq-content tq-breakdown">
-        <h2 className="tq-breakdown-title">Question Breakdown</h2>
+        <h2 className="tq-breakdown-title">{t('quiz.take.breakdown')}</h2>
         {questions.questions.map((q, idx) => {
           const r = resultMap[q.id];
           const correct = r?.is_correct ?? false;
@@ -212,15 +215,15 @@ function ResultView({ data, questions, onRetry, onBack, onResults }: ResultViewP
           return (
             <div key={q.id} className={`tq-breakdown-item ${correct ? 'tq-bd-correct' : 'tq-bd-wrong'}`}>
               <div className="tq-bd-header">
-                <span className="tq-bd-num">Q{idx + 1}</span>
+                <span className="tq-bd-num">{t('quiz.take.questionNum', { num: idx + 1 })}</span>
                 <span className="tq-bd-icon">{correct ? '✓' : '✗'}</span>
               </div>
               <p className="tq-bd-text">{q.text}</p>
               {chosenAns && (
-                <p className="tq-bd-answer">Your answer: <strong>{chosenAns.text}</strong></p>
+                <p className="tq-bd-answer">{t('quiz.take.yourAnswer')} <strong>{chosenAns.text}</strong></p>
               )}
               {!correct && correctAns && (
-                <p className="tq-bd-correct-ans">Correct: <strong>{correctAns.text}</strong></p>
+                <p className="tq-bd-correct-ans">{t('quiz.take.correctAnswer')} <strong>{correctAns.text}</strong></p>
               )}
             </div>
           );

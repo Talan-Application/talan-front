@@ -1,0 +1,225 @@
+{
+  "nav": {
+    "home": "Главная",
+    "quizzes": "Тесты",
+    "commonSubjects": "Общие предметы",
+    "myQuizzes": "Мои тесты",
+    "signOut": "Выйти"
+  },
+  "common": {
+    "loading": "Загрузка…",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "create": "Создать",
+    "edit": "Редактировать",
+    "delete": "Удалить",
+    "saving": "Сохранение…",
+    "back": "← Назад",
+    "home": "← Главная",
+    "prev": "← Пред.",
+    "next": "След. →",
+    "page": "Страница {{page}}",
+    "perPage": "На странице",
+    "id": "ID"
+  },
+  "validation": {
+    "emailRequired": "Email обязателен.",
+    "emailInvalid": "Введите корректный email.",
+    "passwordRequired": "Пароль обязателен.",
+    "passwordTooShort": "Пароль должен содержать не менее 6 символов.",
+    "firstNameRequired": "Имя обязательно.",
+    "lastNameRequired": "Фамилия обязательна."
+  },
+  "auth": {
+    "login": {
+      "title": "С возвращением",
+      "subtitle": "Войдите в аккаунт",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Пароль",
+      "passwordPlaceholder": "••••••••",
+      "submit": "Войти",
+      "submitting": "Вход…",
+      "noAccount": "Нет аккаунта?",
+      "createOne": "Создайте один"
+    },
+    "register": {
+      "title": "Создать аккаунт",
+      "subtitle": "Заполните данные для начала",
+      "firstName": "Имя",
+      "firstNamePlaceholder": "Иван",
+      "lastName": "Фамилия",
+      "lastNamePlaceholder": "Иванов",
+      "middleName": "Отчество",
+      "middleNameOptional": "(необязательно)",
+      "middleNamePlaceholder": "Иванович",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Пароль",
+      "passwordPlaceholder": "••••••••",
+      "submit": "Создать аккаунт",
+      "submitting": "Создание аккаунта…",
+      "hasAccount": "Уже есть аккаунт?",
+      "signIn": "Войти"
+    },
+    "confirmCode": {
+      "title": "Проверьте почту",
+      "subtitle": "Мы отправили 6-значный код на",
+      "verify": "Подтвердить код",
+      "verifying": "Проверка…",
+      "noCode": "Не получили код?",
+      "resend": "Отправить снова",
+      "resending": "Отправка…",
+      "resendSuccess": "Новый код отправлен на вашу почту."
+    }
+  },
+  "home": {
+    "welcomeBack": "С возвращением{{name}}!",
+    "staff": {
+      "subtitle": "Управляйте тестами, курсами и учебным контентом в одном месте.",
+      "quizzes": "Тесты",
+      "commonSubjects": "Общие предметы"
+    },
+    "student": {
+      "subtitle": "Просматривайте доступные тесты и отслеживайте прогресс обучения.",
+      "myQuizzes": "Мои тесты"
+    }
+  },
+  "quiz": {
+    "management": {
+      "title": "Управление тестами",
+      "newQuiz": "+ Новый тест",
+      "noQuizzes": "Тесты не найдены.",
+      "createFirst": "Создать первый тест",
+      "deleteConfirm": "Удалить этот тест?",
+      "createFailed": "Не удалось создать тест.",
+      "saveFailed": "Не удалось сохранить.",
+      "deleteFailed": "Не удалось удалить. Попробуйте снова."
+    },
+    "available": {
+      "title": "Доступные тесты",
+      "noQuizzes": "Тестов пока нет."
+    },
+    "card": {
+      "language": "Язык",
+      "commonSubjectId": "ID общего предмета",
+      "created": "Создан",
+      "take": "Пройти",
+      "results": "Результаты",
+      "edit": "Редактировать",
+      "delete": "Удалить"
+    },
+    "form": {
+      "titleLabel": "Название *",
+      "titlePlaceholder": "Название теста",
+      "language": "Язык",
+      "languagePlaceholder": "напр. Русский",
+      "status": "Статус",
+      "statusDraft": "Черновик",
+      "statusActive": "Активный",
+      "statusInactive": "Неактивный",
+      "type": "Тип",
+      "typePlaceholder": "напр. multiple_choice",
+      "commonSubjectId": "ID общего предмета",
+      "quizDetails": "Детали теста",
+      "questionsAnswers": "Вопросы и ответы",
+      "newQuiz": "Новый тест",
+      "editQuiz": "Редактировать тест",
+      "nextAddQuestions": "Далее: Добавить вопросы →",
+      "saveEditQuestions": "Сохранить и редактировать вопросы →"
+    },
+    "questions": {
+      "addTitle": "Добавить вопросы — {{title}}",
+      "editTitle": "Редактировать вопросы — {{title}}",
+      "questionText": "Текст вопроса *",
+      "questionPlaceholder": "Введите текст вопроса",
+      "context": "Контекст",
+      "contextPlaceholder": "Необязательный контекст",
+      "order": "Порядок",
+      "answerOptions": "Варианты ответа",
+      "addAnswerOption": "+ Добавить вариант",
+      "addQuestion": "+ Добавить вопрос",
+      "addNewQuestion": "Добавить новый вопрос",
+      "adding": "Добавление…",
+      "done": "Готово",
+      "questionsCount": "Вопросов: {{count}}",
+      "questionsAdded_one": "{{count}} вопрос добавлен",
+      "questionsAdded_few": "{{count}} вопроса добавлено",
+      "questionsAdded_many": "{{count}} вопросов добавлено",
+      "questionsAdded_other": "{{count}} вопросов добавлено",
+      "addFailed": "Не удалось добавить вопрос. Попробуйте снова.",
+      "saveFailed": "Не удалось сохранить. Попробуйте снова.",
+      "deleteFailed": "Не удалось удалить вопрос.",
+      "loadFailed": "Не удалось загрузить вопросы.",
+      "deleteConfirm": "Удалить этот вопрос?",
+      "answer": "Ответ {{index}}",
+      "correct": "Верный",
+      "answers": "отв."
+    },
+    "take": {
+      "loading": "Загрузка теста…",
+      "goBack": "Назад",
+      "question": "Вопрос {{number}}",
+      "answered": "{{answered}} / {{total}} отвечено",
+      "remaining_one": "{{count}} вопрос остался",
+      "remaining_few": "{{count}} вопроса осталось",
+      "remaining_many": "{{count}} вопросов осталось",
+      "remaining_other": "{{count}} вопросов осталось",
+      "submit": "Отправить тест",
+      "submitting": "Отправка…",
+      "passed": "Пройден",
+      "failed": "Не пройден",
+      "correct": "Верно",
+      "wrong": "Неверно",
+      "total": "Всего",
+      "viewHistory": "История",
+      "retake": "Пройти снова",
+      "back": "Назад",
+      "breakdown": "Разбор вопросов",
+      "questionNum": "В{{num}}",
+      "yourAnswer": "Ваш ответ:",
+      "correctAnswer": "Правильно:"
+    },
+    "results": {
+      "title": "Результаты теста",
+      "loading": "Загрузка результатов…",
+      "noAttempts": "Попыток пока нет.",
+      "takeQuizNow": "Пройти тест сейчас",
+      "takeQuiz": "Пройти тест",
+      "attempts_one": "{{count}} попытка",
+      "attempts_few": "{{count}} попытки",
+      "attempts_many": "{{count}} попыток",
+      "attempts_other": "{{count}} попыток",
+      "score": "Оценка",
+      "correct": "Верно",
+      "total": "Всего",
+      "submitted": "Отправлено"
+    }
+  },
+  "commonSubject": {
+    "management": {
+      "title": "Управление общими предметами",
+      "addButton": "+ Добавить общий предмет",
+      "nameRu": "Название (RU)",
+      "nameKk": "Название (KK)",
+      "createdDate": "Дата создания",
+      "actions": "Действия",
+      "noSubjects": "Общие предметы не найдены. Нажмите «Добавить» для создания.",
+      "addTitle": "Добавить общий предмет",
+      "editTitle": "Редактировать общий предмет",
+      "nameRuPlaceholder": "Название на русском",
+      "nameKkPlaceholder": "Название на казахском",
+      "bothRequired": "Оба поля обязательны.",
+      "loadFailed": "Не удалось загрузить общие предметы.",
+      "createFailed": "Не удалось создать общий предмет.",
+      "updateFailed": "Не удалось обновить общий предмет.",
+      "deleteFailed": "Не удалось удалить. Попробуйте снова.",
+      "deleteConfirm": "Удалить общий предмет «{{name}}»?"
+    }
+  },
+  "errors": {
+    "somethingWentWrong": "Что-то пошло не так",
+    "tryAgain": "Попробовать снова",
+    "generic": "Что-то пошло не так. Попробуйте снова."
+  }
+}

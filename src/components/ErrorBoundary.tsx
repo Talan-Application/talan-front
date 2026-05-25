@@ -1,4 +1,5 @@
 import { Component, type ReactNode } from 'react';
+import { i18n } from '../i18n';
 
 interface Props {
   children: ReactNode;
@@ -20,13 +21,13 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div style={{ padding: '3rem', textAlign: 'center' }}>
-          <h2>Something went wrong</h2>
+          <h2>{i18n.t('errors.somethingWentWrong')}</h2>
           <p style={{ color: '#6b6375', marginTop: '0.5rem' }}>{this.state.message}</p>
           <button
             style={{ marginTop: '1.5rem', padding: '0.5rem 1.25rem', cursor: 'pointer' }}
             onClick={() => this.setState({ hasError: false, message: '' })}
           >
-            Try again
+            {i18n.t('errors.tryAgain')}
           </button>
         </div>
       );

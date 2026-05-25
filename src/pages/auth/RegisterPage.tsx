@@ -1,5 +1,6 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { authApi } from '../../api';
 import { getApiErrorMessage } from '../../utils/error';
 import { STORAGE_KEYS, ROUTES } from '../../constants';
@@ -25,19 +26,20 @@ const EMPTY_ERRORS: FormErrors = { email: '', first_name: '', last_name: '', pas
 
 function validateField(name: keyof FormErrors, value: string): string {
   if (name === 'email') {
-    if (!value.trim()) return 'Email is required.';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Please enter a valid email.';
+    if (!value.trim()) return 'validation.emailRequired';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'validation.emailInvalid';
   }
-  if (name === 'first_name' && !value.trim()) return 'First name is required.';
-  if (name === 'last_name' && !value.trim()) return 'Last name is required.';
+  if (name === 'first_name' && !value.trim()) return 'validation.firstNameRequired';
+  if (name === 'last_name' && !value.trim()) return 'validation.lastNameRequired';
   if (name === 'password') {
-    if (!value) return 'Password is required.';
-    if (value.length < 6) return 'Password must be at least 6 characters.';
+    if (!value) return 'validation.passwordRequired';
+    if (value.length < 6) return 'validation.passwordTooShort';
   }
   return '';
 }
 
 export function RegisterPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [errors, setErrors] = useState<FormErrors>(EMPTY_ERRORS);
@@ -93,55 +95,55 @@ export function RegisterPage() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h1 className="auth-title">Create account</h1>
-        <p className="auth-subtitle">Fill in your details to get started</p>
+        <h1 className="auth-title">{t('auth.register.title')}</h1>
+        <p className="auth-subtitle">{t('auth.register.subtitle')}</p>
 
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
           {apiError && <div className="auth-error">{apiError}</div>}
 
           <div className="form-row">
             <div className="form-group">
-              <label className="form-label" htmlFor="first_name">First name</label>
+              <label className="form-label" htmlFor="first_name">{t('auth.register.firstName')}</label>
               <input
                 id="first_name"
                 name="first_name"
                 className={`form-input${errors.first_name ? ' form-input-error' : ''}`}
                 type="text"
-                placeholder="John"
+                placeholder={t('auth.register.firstNamePlaceholder')}
                 value={form.first_name}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 autoComplete="given-name"
               />
-              {errors.first_name && <span className="form-field-error">{errors.first_name}</span>}
+              {errors.first_name && <span className="form-field-error">{t(errors.first_name)}</span>}
             </div>
             <div className="form-group">
-              <label className="form-label" htmlFor="last_name">Last name</label>
+              <label className="form-label" htmlFor="last_name">{t('auth.register.lastName')}</label>
               <input
                 id="last_name"
                 name="last_name"
                 className={`form-input${errors.last_name ? ' form-input-error' : ''}`}
                 type="text"
-                placeholder="Doe"
+                placeholder={t('auth.register.lastNamePlaceholder')}
                 value={form.last_name}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 autoComplete="family-name"
               />
-              {errors.last_name && <span className="form-field-error">{errors.last_name}</span>}
+              {errors.last_name && <span className="form-field-error">{t(errors.last_name)}</span>}
             </div>
           </div>
 
           <div className="form-group">
             <label className="form-label" htmlFor="middle_name">
-              Middle name <span className="optional">(optional)</span>
+              {t('auth.register.middleName')} <span className="optional">{t('auth.register.middleNameOptional')}</span>
             </label>
             <input
               id="middle_name"
               name="middle_name"
               className="form-input"
               type="text"
-              placeholder="Smith"
+              placeholder={t('auth.register.middleNamePlaceholder')}
               value={form.middle_name}
               onChange={handleChange}
               autoComplete="additional-name"
@@ -149,44 +151,44 @@ export function RegisterPage() {
           </div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="email">Email</label>
+            <label className="form-label" htmlFor="email">{t('auth.register.email')}</label>
             <input
               id="email"
               name="email"
               className={`form-input${errors.email ? ' form-input-error' : ''}`}
               type="email"
-              placeholder="you@example.com"
+              placeholder={t('auth.register.emailPlaceholder')}
               value={form.email}
               onChange={handleChange}
               onBlur={handleBlur}
               autoComplete="email"
             />
-            {errors.email && <span className="form-field-error">{errors.email}</span>}
+            {errors.email && <span className="form-field-error">{t(errors.email)}</span>}
           </div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="password">Password</label>
+            <label className="form-label" htmlFor="password">{t('auth.register.password')}</label>
             <input
               id="password"
               name="password"
               className={`form-input${errors.password ? ' form-input-error' : ''}`}
               type="password"
-              placeholder="••••••••"
+              placeholder={t('auth.register.passwordPlaceholder')}
               value={form.password}
               onChange={handleChange}
               onBlur={handleBlur}
               autoComplete="new-password"
             />
-            {errors.password && <span className="form-field-error">{errors.password}</span>}
+            {errors.password && <span className="form-field-error">{t(errors.password)}</span>}
           </div>
 
           <button className="auth-btn" type="submit" disabled={loading}>
-            {loading ? 'Creating account…' : 'Create account'}
+            {loading ? t('auth.register.submitting') : t('auth.register.submit')}
           </button>
         </form>
 
         <div className="auth-footer">
-          Already have an account? <Link to={ROUTES.LOGIN}>Sign in</Link>
+          {t('auth.register.hasAccount')} <Link to={ROUTES.LOGIN}>{t('auth.register.signIn')}</Link>
         </div>
       </div>
     </div>

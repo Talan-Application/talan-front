@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { commonSubjectApi } from '../../../api';
 import type { CommonSubject } from '../../../types/common_subject.types';
 import { ROUTES } from '../../../constants';
@@ -17,6 +18,7 @@ const BLANK_FORM: CommonSubjectForm = { name_ru: '', name_kk: '' };
 const PAGE_SIZE = 20;
 
 export function CommonSubjectManagementPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [common_subjects, setCommonSubjects] = useState<CommonSubject[]>([]);
   const [loading, setLoading] = useState(false);
@@ -39,11 +41,11 @@ export function CommonSubjectManagementPage() {
       setHasMore(data.length === PAGE_SIZE);
     } catch (err) {
       if (err instanceof Error && err.name === 'CanceledError') return;
-      setError('Failed to load common subjects.');
+      setError(t('commonSubject.management.loadFailed'));
     } finally {
       setLoading(false);
     }
-  }, [offset]);
+  }, [offset, t]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -71,7 +73,7 @@ export function CommonSubjectManagementPage() {
 
   async function handleCreate() {
     if (!form.name_ru.trim() || !form.name_kk.trim()) {
-      setFormError('Both fields are required.');
+      setFormError(t('commonSubject.management.bothRequired'));
       return;
     }
     setSaving(true);
@@ -81,7 +83,7 @@ export function CommonSubjectManagementPage() {
       closeModal();
       await load();
     } catch {
-      setFormError('Failed to create common subject.');
+      setFormError(t('commonSubject.management.createFailed'));
     } finally {
       setSaving(false);
     }
@@ -89,7 +91,7 @@ export function CommonSubjectManagementPage() {
 
   async function handleEdit() {
     if (!editTarget || !form.name_ru.trim() || !form.name_kk.trim()) {
-      setFormError('Both fields are required.');
+      setFormError(t('commonSubject.management.bothRequired'));
       return;
     }
     setSaving(true);
@@ -99,20 +101,20 @@ export function CommonSubjectManagementPage() {
       closeModal();
       await load();
     } catch {
-      setFormError('Failed to update common subject.');
+      setFormError(t('commonSubject.management.updateFailed'));
     } finally {
       setSaving(false);
     }
   }
 
   async function handleDelete(common_subject: CommonSubject) {
-    if (!confirm(`Delete common subject "${common_subject.translations.ru}"?`)) return;
+    if (!confirm(t('commonSubject.management.deleteConfirm', { name: common_subject.translations.ru }))) return;
     setError('');
     try {
       await commonSubjectApi.delete(common_subject.id);
       await load();
     } catch {
-      setError('Delete failed. Please try again.');
+      setError(t('commonSubject.management.deleteFailed'));
     }
   }
 
@@ -122,15 +124,15 @@ export function CommonSubjectManagementPage() {
     <div className="qm-page">
       <div className="qm-page-header">
         <div className="qm-page-title-row">
-          <button className="qm-back-btn" onClick={() => navigate(ROUTES.HOME)}>← Home</button>
-          <h1 className="qm-page-title">Common Subject Management</h1>
+          <button className="qm-back-btn" onClick={() => navigate(ROUTES.HOME)}>{t('common.home')}</button>
+          <h1 className="qm-page-title">{t('commonSubject.management.title')}</h1>
         </div>
       </div>
 
       <div className="qm-content">
         <div className="qm-toolbar">
           <span />
-          <button className="qm-btn qm-btn-primary" onClick={openCreate}>+ Add Common Subject</button>
+          <button className="qm-btn qm-btn-primary" onClick={openCreate}>{t('commonSubject.management.addButton')}</button>
         </div>
 
         {error && <p className="qm-error">{error}</p>}
@@ -139,24 +141,24 @@ export function CommonSubjectManagementPage() {
           {loading ? (
             <div className="qm-loading-wrap">
               <span className="qm-spinner" />
-              <span>Loading…</span>
+              <span>{t('common.loading')}</span>
             </div>
           ) : (
             <table className="qm-table">
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Name (RU)</th>
-                  <th>Name (KZ)</th>
-                  <th>Created Date</th>
-                  <th>Actions</th>
+                  <th>{t('common.id')}</th>
+                  <th>{t('commonSubject.management.nameRu')}</th>
+                  <th>{t('commonSubject.management.nameKk')}</th>
+                  <th>{t('commonSubject.management.createdDate')}</th>
+                  <th>{t('commonSubject.management.actions')}</th>
                 </tr>
               </thead>
               <tbody>
                 {common_subjects.length === 0 ? (
                   <tr>
                     <td colSpan={5} className="qm-empty">
-                      No common subjects found. Click "Add Common Subject" to create one.
+                      {t('commonSubject.management.noSubjects')}
                     </td>
                   </tr>
                 ) : (
@@ -172,13 +174,13 @@ export function CommonSubjectManagementPage() {
                             className="qm-btn qm-btn-ghost qm-btn-sm"
                             onClick={() => openEdit(common_subject)}
                           >
-                            Edit
+                            {t('common.edit')}
                           </button>
                           <button
                             className="qm-btn qm-btn-danger qm-btn-sm"
                             onClick={() => handleDelete(common_subject)}
                           >
-                            Delete
+                            {t('common.delete')}
                           </button>
                         </div>
                       </td>
@@ -197,15 +199,15 @@ export function CommonSubjectManagementPage() {
               disabled={offset === 0}
               onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
             >
-              ← Prev
+              {t('common.prev')}
             </button>
-            <span className="qm-page-label">Page {page}</span>
+            <span className="qm-page-label">{t('common.page', { page })}</span>
             <button
               className="qm-btn qm-btn-ghost qm-btn-sm"
               disabled={!hasMore}
               onClick={() => setOffset(offset + PAGE_SIZE)}
             >
-              Next →
+              {t('common.next')}
             </button>
           </div>
         )}
@@ -213,26 +215,26 @@ export function CommonSubjectManagementPage() {
 
       {(modal === 'create' || modal === 'edit') && (
         <Modal
-          title={modal === 'create' ? 'Add Common Subject' : 'Edit Common Subject'}
+          title={modal === 'create' ? t('commonSubject.management.addTitle') : t('commonSubject.management.editTitle')}
           onClose={closeModal}
         >
           <div className="qm-form">
             <div className="qm-field">
-              <label className="qm-label" htmlFor="sub-name-ru">Name (RU)</label>
+              <label className="qm-label" htmlFor="sub-name-ru">{t('commonSubject.management.nameRu')}</label>
               <input
                 id="sub-name-ru"
                 className="qm-input"
-                placeholder="Common subject name in Russian"
+                placeholder={t('commonSubject.management.nameRuPlaceholder')}
                 value={form.name_ru}
                 onChange={e => setForm(f => ({ ...f, name_ru: e.target.value }))}
               />
             </div>
             <div className="qm-field">
-              <label className="qm-label" htmlFor="sub-name-kk">Name (KK)</label>
+              <label className="qm-label" htmlFor="sub-name-kk">{t('commonSubject.management.nameKk')}</label>
               <input
                 id="sub-name-kk"
                 className="qm-input"
-                placeholder="Common subject name in Kazakh"
+                placeholder={t('commonSubject.management.nameKkPlaceholder')}
                 value={form.name_kk}
                 onChange={e => setForm(f => ({ ...f, name_kk: e.target.value }))}
               />
@@ -241,14 +243,14 @@ export function CommonSubjectManagementPage() {
           </div>
           <div className="qm-modal-footer">
             <button className="qm-btn qm-btn-ghost" onClick={closeModal} disabled={saving}>
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               className="qm-btn qm-btn-primary"
               onClick={modal === 'create' ? handleCreate : handleEdit}
               disabled={saving}
             >
-              {saving ? 'Saving…' : modal === 'create' ? 'Create' : 'Save'}
+              {saving ? t('common.saving') : modal === 'create' ? t('common.create') : t('common.save')}
             </button>
           </div>
         </Modal>
