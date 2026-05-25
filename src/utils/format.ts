@@ -1,17 +1,18 @@
-function toMs(timestamp: number): number {
-  return timestamp > 1e12 ? timestamp : timestamp * 1000;
+function toDate(value: number | string): Date {
+  if (typeof value === 'string') return new Date(value);
+  return new Date(value > 1e12 ? value : value * 1000);
 }
 
-export function formatDate(timestamp: number): string {
-  return new Date(toMs(timestamp)).toLocaleDateString('en-US', {
+export function formatDate(value: number | string): string {
+  return toDate(value).toLocaleDateString('ru-RU', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
   });
 }
 
-export function formatDateTime(timestamp: number): string {
-  return new Date(toMs(timestamp)).toLocaleString('en-US', {
+export function formatDateTime(value: number | string): string {
+  return toDate(value).toLocaleString('ru-RU', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',

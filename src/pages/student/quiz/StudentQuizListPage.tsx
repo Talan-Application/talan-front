@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useQuizStore } from '../../../stores/quizStore';
 import { PAGE_SIZES, ROUTES } from '../../../constants';
 import { QuizCard } from '../../../components/quiz/QuizCard';
 import '../../quiz.css';
 
 export function StudentQuizListPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { items, loading, error, limit, offset, hasMore, setLimit, setOffset, fetchQuizzes } = useQuizStore();
 
@@ -21,15 +23,15 @@ export function StudentQuizListPage() {
     <div className="qm-page">
       <div className="qm-page-header">
         <div className="qm-page-title-row">
-          <button className="qm-back-btn" onClick={() => navigate(ROUTES.HOME)}>← Home</button>
-          <h1 className="qm-page-title">Available Quizzes</h1>
+          <button className="qm-back-btn" onClick={() => navigate(ROUTES.HOME)}>{t('common.home')}</button>
+          <h1 className="qm-page-title">{t('quiz.available.title')}</h1>
         </div>
       </div>
 
       <div className="qm-content">
         <div className="qm-toolbar">
           <div className="qm-toolbar-left">
-            <label className="qm-per-page-label">Per page</label>
+            <label className="qm-per-page-label">{t('common.perPage')}</label>
             <select
               className="qm-per-page"
               value={limit}
@@ -45,11 +47,11 @@ export function StudentQuizListPage() {
         {loading ? (
           <div className="qm-loading-wrap">
             <span className="qm-spinner" />
-            <span>Loading…</span>
+            <span>{t('common.loading')}</span>
           </div>
         ) : items.length === 0 ? (
           <div className="qm-empty-state">
-            <p>No quizzes available yet.</p>
+            <p>{t('quiz.available.noQuizzes')}</p>
           </div>
         ) : (
           <div className="quiz-grid">
@@ -66,15 +68,15 @@ export function StudentQuizListPage() {
               disabled={offset === 0}
               onClick={() => setOffset(Math.max(0, offset - limit))}
             >
-              ← Prev
+              {t('common.prev')}
             </button>
-            <span className="qm-page-label">Page {page}</span>
+            <span className="qm-page-label">{t('common.page', { page })}</span>
             <button
               className="qm-btn qm-btn-ghost qm-btn-sm"
               disabled={!hasMore}
               onClick={() => setOffset(offset + limit)}
             >
-              Next →
+              {t('common.next')}
             </button>
           </div>
         )}

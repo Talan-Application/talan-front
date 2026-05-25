@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { questionApi, answerApi } from '../../api';
 import type { Quiz, Question, Answer } from '../../types/quiz.types';
 import { Modal } from './Modal';
@@ -61,6 +62,7 @@ interface Props {
 }
 
 export function EditQuestionsModal({ quiz, onClose }: Props) {
+  const { t } = useTranslation();
   const [questions, setQuestions] = useState<QuestionWithAnswers[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
@@ -93,13 +95,13 @@ export function EditQuestionsModal({ quiz, onClose }: Props) {
         );
         setQuestions(withAnswers);
       } catch {
-        setLoadError('Failed to load questions.');
+        setLoadError(t('quiz.questions.loadFailed'));
       } finally {
         setLoading(false);
       }
     }
     void load();
-  }, [quiz.id, refreshKey]);
+  }, [quiz.id, refreshKey, t]);
 
   function startEdit(q: QuestionWithAnswers) {
     setEditingId(q.id);
@@ -144,19 +146,19 @@ export function EditQuestionsModal({ quiz, onClose }: Props) {
       cancelEdit();
       triggerRefresh();
     } catch {
-      setEditError('Failed to save. Please try again.');
+      setEditError(t('quiz.questions.saveFailed'));
     } finally {
       setEditSaving(false);
     }
   }
 
   async function deleteQuestion(id: number) {
-    if (!confirm('Delete this question?')) return;
+    if (!confirm(t('quiz.questions.deleteConfirm'))) return;
     try {
       await questionApi.delete(id);
       setQuestions(prev => prev.filter(q => q.id !== id));
     } catch {
-      setLoadError('Failed to delete question.');
+      setLoadError(t('quiz.questions.deleteFailed'));
     }
   }
 
@@ -188,18 +190,18 @@ export function EditQuestionsModal({ quiz, onClose }: Props) {
       setNewDraft(BLANK_DRAFT);
       triggerRefresh();
     } catch {
-      setAddError('Failed to add question. Please try again.');
+      setAddError(t('quiz.questions.addFailed'));
     } finally {
       setAddSaving(false);
     }
   }
 
   return (
-    <Modal title={`Edit Questions — ${quiz.title}`} onClose={onClose} wide>
+    <Modal title={t('quiz.questions.editTitle', { title: quiz.title })} onClose={onClose} wide>
       <div className="qm-step2-body">
         {loading ? (
           <div className="qm-loading-wrap" style={{ padding: '2rem' }}>
-            <span className="qm-spinner" /><span>Loading questions…</span>
+            <span className="qm-spinner" /><span>{t('common.loading')}</span>
           </div>
         ) : (
           <>
@@ -207,13 +209,13 @@ export function EditQuestionsModal({ quiz, onClose }: Props) {
 
             {questions.length > 0 && (
               <div className="qm-eq-list">
-                <p className="qm-eq-section-label">Questions ({questions.length})</p>
+                <p className="qm-eq-section-label">{t('quiz.questions.questionsCount', { count: questions.length })}</p>
                 {questions.map((q, i) => (
                   <div key={q.id} className="qm-eq-item">
                     {editingId === q.id && editDraft ? (
                       <div className="qm-eq-edit-form">
                         <div className="qm-field">
-                          <label className="qm-label">Question text *</label>
+                          <label className="qm-label">{t('quiz.questions.questionText')}</label>
                           <textarea
                             className="qm-input qm-textarea"
                             rows={2}
@@ -224,16 +226,16 @@ export function EditQuestionsModal({ quiz, onClose }: Props) {
                         </div>
                         <div className="qm-field-row">
                           <div className="qm-field">
-                            <label className="qm-label">Context</label>
+                            <label className="qm-label">{t('quiz.questions.context')}</label>
                             <input
                               className="qm-input"
                               value={editDraft.context}
                               onChange={e => setEditDraft(d => d && { ...d, context: e.target.value })}
-                              placeholder="Optional context"
+                              placeholder={t('quiz.questions.contextPlaceholder')}
                             />
                           </div>
                           <div className="qm-field qm-field-narrow">
-                            <label className="qm-label">Order</label>
+                            <label className="qm-label">{t('quiz.questions.order')}</label>
                             <input
                               className="qm-input"
                               type="number"
@@ -245,7 +247,7 @@ export function EditQuestionsModal({ quiz, onClose }: Props) {
                           </div>
                         </div>
                         <div className="qm-field">
-                          <label className="qm-label">Answer options</label>
+                          <label className="qm-label">{t('quiz.questions.answerOptions')}</label>
                           <div className="qm-answers-list">
                             {editDraft.answers.map((ans, idx) =>
                               ans._deleted ? null : (
@@ -271,7 +273,7 @@ export function EditQuestionsModal({ quiz, onClose }: Props) {
                                 })
                               }
                             >
-                              + Add answer option
+                              {t('quiz.questions.addAnswerOption')}
                             </button>
                           </div>
                         </div>
@@ -282,10 +284,10 @@ export function EditQuestionsModal({ quiz, onClose }: Props) {
                             onClick={saveEdit}
                             disabled={editSaving || !editDraft.text.trim()}
                           >
-                            {editSaving ? 'Saving…' : 'Save'}
+                            {editSaving ? t('common.saving') : t('common.save')}
                           </button>
                           <button className="qm-btn qm-btn-ghost qm-btn-sm" onClick={cancelEdit}>
-                            Cancel
+                            {t('common.cancel')}
                           </button>
                         </div>
                       </div>
@@ -295,15 +297,15 @@ export function EditQuestionsModal({ quiz, onClose }: Props) {
                           <span className="qm-eq-num">{i + 1}.</span>
                           <span className="qm-eq-text">{q.text}</span>
                           {q.answers.length > 0 && (
-                            <span className="qm-eq-answer-count">{q.answers.length} ans</span>
+                            <span className="qm-eq-answer-count">{q.answers.length} {t('quiz.questions.answers')}</span>
                           )}
                         </div>
                         <div className="qm-eq-actions">
                           <button className="qm-btn qm-btn-sm qm-btn-ghost" onClick={() => startEdit(q)}>
-                            Edit
+                            {t('common.edit')}
                           </button>
                           <button className="qm-btn qm-btn-sm qm-btn-danger" onClick={() => deleteQuestion(q.id)}>
-                            Delete
+                            {t('common.delete')}
                           </button>
                         </div>
                       </div>
@@ -316,30 +318,30 @@ export function EditQuestionsModal({ quiz, onClose }: Props) {
         )}
 
         <div className="qm-eq-add-section">
-          <p className="qm-eq-section-label">Add New Question</p>
+          <p className="qm-eq-section-label">{t('quiz.questions.addNewQuestion')}</p>
           <div className="qm-form" style={{ padding: 0, gap: '0.85rem' }}>
             <div className="qm-field">
-              <label className="qm-label">Question text *</label>
+              <label className="qm-label">{t('quiz.questions.questionText')}</label>
               <textarea
                 className="qm-input qm-textarea"
                 rows={2}
                 value={newDraft.text}
                 onChange={e => setNewDraft(d => ({ ...d, text: e.target.value }))}
-                placeholder="Enter question text"
+                placeholder={t('quiz.questions.questionPlaceholder')}
               />
             </div>
             <div className="qm-field-row">
               <div className="qm-field">
-                <label className="qm-label">Context</label>
+                <label className="qm-label">{t('quiz.questions.context')}</label>
                 <input
                   className="qm-input"
                   value={newDraft.context}
                   onChange={e => setNewDraft(d => ({ ...d, context: e.target.value }))}
-                  placeholder="Optional context"
+                  placeholder={t('quiz.questions.contextPlaceholder')}
                 />
               </div>
               <div className="qm-field qm-field-narrow">
-                <label className="qm-label">Order</label>
+                <label className="qm-label">{t('quiz.questions.order')}</label>
                 <input
                   className="qm-input"
                   type="number"
@@ -351,7 +353,7 @@ export function EditQuestionsModal({ quiz, onClose }: Props) {
               </div>
             </div>
             <div className="qm-field">
-              <label className="qm-label">Answer options</label>
+              <label className="qm-label">{t('quiz.questions.answerOptions')}</label>
               <div className="qm-answers-list">
                 {newDraft.answers.map((ans, i) => (
                   <AnswerField
@@ -370,7 +372,7 @@ export function EditQuestionsModal({ quiz, onClose }: Props) {
                   className="qm-btn qm-btn-ghost qm-btn-sm qm-add-answer-btn"
                   onClick={() => setNewDraft(d => ({ ...d, answers: [...d.answers, { text: '', is_correct: false }] }))}
                 >
-                  + Add answer option
+                  {t('quiz.questions.addAnswerOption')}
                 </button>
               </div>
             </div>
@@ -385,10 +387,10 @@ export function EditQuestionsModal({ quiz, onClose }: Props) {
           onClick={addQuestion}
           disabled={addSaving || !newDraft.text.trim()}
         >
-          {addSaving ? 'Adding…' : '+ Add Question'}
+          {addSaving ? t('quiz.questions.adding') : t('quiz.questions.addQuestion')}
         </button>
         <button className="qm-btn qm-btn-ghost" onClick={onClose}>
-          Done
+          {t('quiz.questions.done')}
         </button>
       </div>
     </Modal>

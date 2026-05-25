@@ -1,0 +1,219 @@
+{
+  "nav": {
+    "home": "Басты бет",
+    "quizzes": "Тесттер",
+    "commonSubjects": "Жалпы пәндер",
+    "myQuizzes": "Менің тесттерім",
+    "signOut": "Шығу"
+  },
+  "common": {
+    "loading": "Жүктелуде…",
+    "cancel": "Болдырмау",
+    "save": "Сақтау",
+    "create": "Жасау",
+    "edit": "Өңдеу",
+    "delete": "Жою",
+    "saving": "Сақталуда…",
+    "back": "← Артқа",
+    "home": "← Басты бет",
+    "prev": "← Алдыңғы",
+    "next": "Келесі →",
+    "page": "{{page}} бет",
+    "perPage": "Беттегі",
+    "id": "ID"
+  },
+  "validation": {
+    "emailRequired": "Email міндетті.",
+    "emailInvalid": "Жарамды email енгізіңіз.",
+    "passwordRequired": "Құпия сөз міндетті.",
+    "passwordTooShort": "Құпия сөз кем дегенде 6 таңбадан тұруы керек.",
+    "firstNameRequired": "Аты міндетті.",
+    "lastNameRequired": "Тегі міндетті."
+  },
+  "auth": {
+    "login": {
+      "title": "Қайта оралдыңыз",
+      "subtitle": "Аккаунтыңызға кіріңіз",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Құпия сөз",
+      "passwordPlaceholder": "••••••••",
+      "submit": "Кіру",
+      "submitting": "Кіру…",
+      "noAccount": "Аккаунтыңыз жоқ па?",
+      "createOne": "Жасаңыз"
+    },
+    "register": {
+      "title": "Аккаунт жасау",
+      "subtitle": "Бастау үшін деректерді толтырыңыз",
+      "firstName": "Аты",
+      "firstNamePlaceholder": "Алихан",
+      "lastName": "Тегі",
+      "lastNamePlaceholder": "Сейтқали",
+      "middleName": "Әкесінің аты",
+      "middleNameOptional": "(міндетті емес)",
+      "middleNamePlaceholder": "Нұрланұлы",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Құпия сөз",
+      "passwordPlaceholder": "••••••••",
+      "submit": "Аккаунт жасау",
+      "submitting": "Аккаунт жасалуда…",
+      "hasAccount": "Аккаунтыңыз бар ма?",
+      "signIn": "Кіріңіз"
+    },
+    "confirmCode": {
+      "title": "Поштаңызды тексеріңіз",
+      "subtitle": "6 таңбалы кодты мына адреске жібердік:",
+      "verify": "Кодты растау",
+      "verifying": "Тексерілуде…",
+      "noCode": "Код келмеді ме?",
+      "resend": "Қайта жіберу",
+      "resending": "Жіберілуде…",
+      "resendSuccess": "Жаңа код поштаңызға жіберілді."
+    }
+  },
+  "home": {
+    "welcomeBack": "Қайта оралдыңыз{{name}}!",
+    "staff": {
+      "subtitle": "Тесттерді, курстарды және оқу мазмұнын бір жерде басқарыңыз.",
+      "quizzes": "Тесттер",
+      "commonSubjects": "Жалпы пәндер"
+    },
+    "student": {
+      "subtitle": "Қолжетімді тесттерді қараңыз және оқу прогресіңізді бақылаңыз.",
+      "myQuizzes": "Менің тесттерім"
+    }
+  },
+  "quiz": {
+    "management": {
+      "title": "Тесттерді басқару",
+      "newQuiz": "+ Жаңа тест",
+      "noQuizzes": "Тесттер табылмады.",
+      "createFirst": "Бірінші тестті жасаңыз",
+      "deleteConfirm": "Бұл тестті жою керек пе?",
+      "createFailed": "Тестті жасау мүмкін болмады.",
+      "saveFailed": "Сақтау мүмкін болмады.",
+      "deleteFailed": "Жою мүмкін болмады. Қайталап көріңіз."
+    },
+    "available": {
+      "title": "Қолжетімді тесттер",
+      "noQuizzes": "Тесттер әлі жоқ."
+    },
+    "card": {
+      "language": "Тіл",
+      "commonSubjectId": "Жалпы пән ID",
+      "created": "Жасалған",
+      "take": "Тапсыру",
+      "results": "Нәтижелер",
+      "edit": "Өңдеу",
+      "delete": "Жою"
+    },
+    "form": {
+      "titleLabel": "Атауы *",
+      "titlePlaceholder": "Тест атауы",
+      "language": "Тіл",
+      "languagePlaceholder": "мыс. Қазақша",
+      "status": "Күйі",
+      "statusDraft": "Жоба",
+      "statusActive": "Белсенді",
+      "statusInactive": "Белсенді емес",
+      "type": "Түрі",
+      "typePlaceholder": "мыс. multiple_choice",
+      "commonSubjectId": "Жалпы пән ID",
+      "quizDetails": "Тест мәліметтері",
+      "questionsAnswers": "Сұрақтар мен жауаптар",
+      "newQuiz": "Жаңа тест",
+      "editQuiz": "Тестті өңдеу",
+      "nextAddQuestions": "Келесі: Сұрақтар қосу →",
+      "saveEditQuestions": "Сақтау және сұрақтарды өңдеу →"
+    },
+    "questions": {
+      "addTitle": "Сұрақтар қосу — {{title}}",
+      "editTitle": "Сұрақтарды өңдеу — {{title}}",
+      "questionText": "Сұрақ мәтіні *",
+      "questionPlaceholder": "Сұрақ мәтінін енгізіңіз",
+      "context": "Мәтінмән",
+      "contextPlaceholder": "Міндетті емес мәтінмән",
+      "order": "Реті",
+      "answerOptions": "Жауап нұсқалары",
+      "addAnswerOption": "+ Жауап нұсқасын қосу",
+      "addQuestion": "+ Сұрақ қосу",
+      "addNewQuestion": "Жаңа сұрақ қосу",
+      "adding": "Қосылуда…",
+      "done": "Дайын",
+      "questionsCount": "Сұрақтар: {{count}}",
+      "questionsAdded_one": "{{count}} сұрақ қосылды",
+      "questionsAdded_other": "{{count}} сұрақ қосылды",
+      "addFailed": "Сұрақты қосу мүмкін болмады. Қайталап көріңіз.",
+      "saveFailed": "Сақтау мүмкін болмады. Қайталап көріңіз.",
+      "deleteFailed": "Сұрақты жою мүмкін болмады.",
+      "loadFailed": "Сұрақтарды жүктеу мүмкін болмады.",
+      "deleteConfirm": "Бұл сұрақты жою керек пе?",
+      "answer": "Жауап {{index}}",
+      "correct": "Дұрыс",
+      "answers": "жауап"
+    },
+    "take": {
+      "loading": "Тест жүктелуде…",
+      "goBack": "Артқа",
+      "question": "Сұрақ {{number}}",
+      "answered": "{{answered}} / {{total}} жауап берілді",
+      "remaining_one": "{{count}} сұрақ қалды",
+      "remaining_other": "{{count}} сұрақ қалды",
+      "submit": "Тестті тапсыру",
+      "submitting": "Тапсырылуда…",
+      "passed": "Өтті",
+      "failed": "Өтпеді",
+      "correct": "Дұрыс",
+      "wrong": "Қате",
+      "total": "Барлығы",
+      "viewHistory": "Тарихты көру",
+      "retake": "Қайта тапсыру",
+      "back": "Артқа",
+      "breakdown": "Сұрақтарды талдау",
+      "questionNum": "С{{num}}",
+      "yourAnswer": "Сіздің жауабыңыз:",
+      "correctAnswer": "Дұрыс жауап:"
+    },
+    "results": {
+      "title": "Тест нәтижелері",
+      "loading": "Нәтижелер жүктелуде…",
+      "noAttempts": "Әлі талпыныс жоқ.",
+      "takeQuizNow": "Тестті қазір тапсыру",
+      "takeQuiz": "Тестті тапсыру",
+      "attempts_one": "{{count}} талпыныс",
+      "attempts_other": "{{count}} талпыныс",
+      "score": "Баға",
+      "correct": "Дұрыс",
+      "total": "Барлығы",
+      "submitted": "Тапсырылды"
+    }
+  },
+  "commonSubject": {
+    "management": {
+      "title": "Жалпы пәндерді басқару",
+      "addButton": "+ Жалпы пән қосу",
+      "nameRu": "Атауы (RU)",
+      "nameKk": "Атауы (KK)",
+      "createdDate": "Жасалған күні",
+      "actions": "Әрекеттер",
+      "noSubjects": "Жалпы пәндер табылмады. Жасау үшін «Қосу» батырмасын басыңыз.",
+      "addTitle": "Жалпы пән қосу",
+      "editTitle": "Жалпы пәнді өңдеу",
+      "nameRuPlaceholder": "Орысша атауы",
+      "nameKkPlaceholder": "Қазақша атауы",
+      "bothRequired": "Екі өріс те міндетті.",
+      "loadFailed": "Жалпы пәндерді жүктеу мүмкін болмады.",
+      "createFailed": "Жалпы пәнді жасау мүмкін болмады.",
+      "updateFailed": "Жалпы пәнді жаңарту мүмкін болмады.",
+      "deleteFailed": "Жою мүмкін болмады. Қайталап көріңіз.",
+      "deleteConfirm": "«{{name}}» жалпы пәнін жою керек пе?"
+    }
+  },
+  "errors": {
+    "somethingWentWrong": "Бірдеңе дұрыс болмады",
+    "tryAgain": "Қайталап көру",
+    "generic": "Бірдеңе дұрыс болмады. Қайталап көріңіз."
+  }
+}

@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { Quiz } from '../../types/quiz.types';
 import { ROUTES } from '../../constants';
 import { formatDate } from '../../utils/format';
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export function QuizCard({ item, onEdit, onDelete }: Props) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
@@ -33,33 +35,33 @@ export function QuizCard({ item, onEdit, onDelete }: Props) {
       <h3 className="quiz-card-title">{item.title}</h3>
       <dl className="quiz-card-meta">
         <div className="quiz-card-row">
-          <dt>Language</dt>
+          <dt>{t('quiz.card.language')}</dt>
           <dd>{item.language || '—'}</dd>
         </div>
         <div className="quiz-card-row">
-          <dt>Common Subject ID</dt>
+          <dt>{t('quiz.card.commonSubjectId')}</dt>
           <dd>{item.common_subject_id}</dd>
         </div>
         <div className="quiz-card-row">
-          <dt>Created</dt>
+          <dt>{t('quiz.card.created')}</dt>
           <dd>{item.created_at ? formatDate(item.created_at) : '—'}</dd>
         </div>
       </dl>
       <div className="quiz-card-actions">
         <button className="qm-btn qm-btn-sm qm-btn-primary" onClick={() => navigate(ROUTES.TAKE_QUIZ(item.id))}>
-          Take
+          {t('quiz.card.take')}
         </button>
         <button className="qm-btn qm-btn-sm qm-btn-ghost" onClick={() => navigate(ROUTES.QUIZ_RESULTS(item.id))}>
-          Results
+          {t('quiz.card.results')}
         </button>
         {onEdit && (
           <button className="qm-btn qm-btn-sm qm-btn-ghost" onClick={onEdit}>
-            Edit
+            {t('quiz.card.edit')}
           </button>
         )}
         {onDelete && (
           <button className="qm-btn qm-btn-sm qm-btn-danger" onClick={onDelete}>
-            Delete
+            {t('quiz.card.delete')}
           </button>
         )}
       </div>

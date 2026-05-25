@@ -1,5 +1,6 @@
 import { useState, useEffect, type FormEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { authApi } from '../../api';
 import { useAuthStore } from '../../stores/authStore';
 import { getApiErrorMessage } from '../../utils/error';
@@ -15,6 +16,7 @@ interface LocationState {
 }
 
 export function ConfirmCodePage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const { setAuthData } = useAuthStore();
@@ -66,7 +68,7 @@ export function ConfirmCodePage() {
     setResending(true);
     try {
       await authApi.resendCode(email);
-      setResendMsg('A new code has been sent to your email.');
+      setResendMsg(t('auth.confirmCode.resendSuccess'));
       setDigits(Array(6).fill(''));
     } catch (err) {
       setError(getApiErrorMessage(err));
@@ -78,9 +80,9 @@ export function ConfirmCodePage() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h1 className="auth-title">Check your email</h1>
+        <h1 className="auth-title">{t('auth.confirmCode.title')}</h1>
         <p className="auth-subtitle">
-          We sent a 6-digit code to <strong>{email}</strong>
+          {t('auth.confirmCode.subtitle')} <strong>{email}</strong>
         </p>
 
         <form onSubmit={handleSubmit}>
@@ -90,19 +92,19 @@ export function ConfirmCodePage() {
           <OtpInput digits={digits} onChange={setDigits} disabled={loading} />
 
           <button className="auth-btn" type="submit" disabled={!isComplete || loading}>
-            {loading ? 'Verifying…' : 'Verify code'}
+            {loading ? t('auth.confirmCode.verifying') : t('auth.confirmCode.verify')}
           </button>
         </form>
 
         <div className="auth-footer">
-          Didn&apos;t receive a code?{' '}
+          {t('auth.confirmCode.noCode')}{' '}
           <button
             className="auth-link-btn"
             type="button"
             onClick={handleResend}
             disabled={resending}
           >
-            {resending ? 'Sending…' : 'Resend'}
+            {resending ? t('auth.confirmCode.resending') : t('auth.confirmCode.resend')}
           </button>
         </div>
       </div>

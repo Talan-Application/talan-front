@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 interface Props {
   text: string;
   isCorrect: boolean;
@@ -9,13 +11,15 @@ interface Props {
 }
 
 export function AnswerField({ text, isCorrect, index, canRemove, onTextChange, onCorrectChange, onRemove }: Props) {
+  const { t } = useTranslation();
+
   return (
     <div className="qm-answer-row">
       <input
         className="qm-input qm-answer-input"
         value={text}
         onChange={e => onTextChange(e.target.value)}
-        placeholder={`Answer ${index + 1}`}
+        placeholder={t('quiz.questions.answer', { index: index + 1 })}
       />
       <label className="qm-answer-correct">
         <input
@@ -24,7 +28,7 @@ export function AnswerField({ text, isCorrect, index, canRemove, onTextChange, o
           checked={isCorrect}
           onChange={e => onCorrectChange(e.target.checked)}
         />
-        Correct
+        {t('quiz.questions.correct')}
       </label>
       {canRemove && (
         <button type="button" className="qm-btn qm-btn-sm qm-btn-danger" onClick={onRemove}>

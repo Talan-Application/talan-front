@@ -1,27 +1,31 @@
 import { useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../stores/authStore';
 import { authApi } from '../api';
 import { ROUTES } from '../constants';
+import { LANGUAGES, setLanguage, type LangCode } from '../i18n';
 import './header.css';
 
-const STAFF_NAV = [
-  { to: ROUTES.HOME, label: 'Home' },
-  { to: ROUTES.QUIZZES, label: 'Quizzes' },
-  { to: ROUTES.COMMON_SUBJECTS, label: 'Common Subjects' },
-];
-
-const STUDENT_NAV = [
-  { to: ROUTES.HOME, label: 'Home' },
-  { to: ROUTES.STUDENT_QUIZZES, label: 'My Quizzes' },
-];
-
 export function Header() {
+  const { t, i18n } = useTranslation();
   const { user, isAuthenticated, logout } = useAuthStore();
-  const navLinks = user?.role === 'student' ? STUDENT_NAV : STAFF_NAV;
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const staffNav = [
+    { to: ROUTES.HOME, label: t('nav.home') },
+    { to: ROUTES.QUIZZES, label: t('nav.quizzes') },
+    { to: ROUTES.COMMON_SUBJECTS, label: t('nav.commonSubjects') },
+  ];
+
+  const studentNav = [
+    { to: ROUTES.HOME, label: t('nav.home') },
+    { to: ROUTES.STUDENT_QUIZZES, label: t('nav.myQuizzes') },
+  ];
+
+  const navLinks = user?.role === 'student' ? studentNav : staffNav;
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -64,8 +68,20 @@ export function Header() {
         ))}
       </nav>
 
-      {isAuthenticated && (
-        <div className="header-actions">
+      <div className="header-actions">
+        <div className="header-lang-switcher">
+          {LANGUAGES.map(({ code, label }) => (
+            <button
+              key={code}
+              className={`header-lang-btn${i18n.language === code ? ' active' : ''}`}
+              onClick={() => setLanguage(code as LangCode)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {isAuthenticated && (
           <div className="header-profile-wrapper" ref={dropdownRef}>
             <button
               className="header-profile-btn"
@@ -75,7 +91,7 @@ export function Header() {
                 {user ? user.first_name[0].toUpperCase() : '?'}
               </div>
               <span className="header-profile-name">
-                {user ? `${user.first_name} ${user.last_name}` : 'Profile'}
+                {user ? `${user.first_name} ${user.last_name}` : ''}
               </span>
               <svg
                 className={`header-chevron${dropdownOpen ? ' open' : ''}`}
@@ -109,13 +125,13 @@ export function Header() {
                     <polyline points="16 17 21 12 16 7" />
                     <line x1="21" y1="12" x2="9" y2="12" />
                   </svg>
-                  Sign out
+                  {t('nav.signOut')}
                 </button>
               </div>
             )}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </header>
   );
 }
