@@ -1,11 +1,15 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Modal } from './Modal';
+import { QuizType } from '../../types/quiz.types';
+import { LANGUAGES } from '../../constants';
+import { commonSubjectApi } from '../../api';
+import type { CommonSubjectLookupItem } from '../../types/common_subject.types';
 
 export interface QuizFormData {
   title: string;
   language: string;
-  status: string;
-  type: string;
+  type: QuizType;
   common_subject_id: string;
 }
 
@@ -22,6 +26,11 @@ interface Props {
 
 export function QuizFormModal({ title, form, onFormChange, error, saving, submitLabel, onCancel, onSubmit }: Props) {
   const { t } = useTranslation();
+  const [subjects, setSubjects] = useState<CommonSubjectLookupItem[]>([]);
+
+  useEffect(() => {
+    commonSubjectApi.lookup().then(setSubjects).catch(() => {});
+  }, []);
 
   function update(field: keyof QuizFormData) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
@@ -56,42 +65,30 @@ export function QuizFormModal({ title, form, onFormChange, error, saving, submit
         <div className="qm-field-row">
           <div className="qm-field">
             <label className="qm-label">{t('quiz.form.language')}</label>
-            <input
-              className="qm-input"
-              value={form.language}
-              onChange={update('language')}
-              placeholder={t('quiz.form.languagePlaceholder')}
-            />
+            <select className="qm-input qm-select" value={form.language} onChange={update('language')}>
+              <option value="">{t('quiz.form.languagePlaceholder')}</option>
+              {LANGUAGES.map(({ languageCode, nativeName }) => (
+                <option key={languageCode} value={languageCode}>{nativeName}</option>
+              ))}
+            </select>
           </div>
           <div className="qm-field">
-            <label className="qm-label">{t('quiz.form.status')}</label>
-            <select className="qm-input qm-select" value={form.status} onChange={update('status')}>
-              <option value="draft">{t('quiz.form.statusDraft')}</option>
-              <option value="active">{t('quiz.form.statusActive')}</option>
-              <option value="inactive">{t('quiz.form.statusInactive')}</option>
+            <label className="qm-label">{t('quiz.form.type')}</label>
+            <select className="qm-input qm-select" value={form.type} onChange={update('type')}>
+              <option value={QuizType.ENT}>{t('quiz.types.ent')}</option>
+              <option value={QuizType.MONTHLY_EXAM}>{t('quiz.types.monthly_exam')}</option>
+              <option value={QuizType.EXAM}>{t('quiz.types.exam')}</option>
             </select>
           </div>
         </div>
-        <div className="qm-field-row">
-          <div className="qm-field">
-            <label className="qm-label">{t('quiz.form.type')}</label>
-            <input
-              className="qm-input"
-              value={form.type}
-              onChange={update('type')}
-              placeholder={t('quiz.form.typePlaceholder')}
-            />
-          </div>
-          <div className="qm-field">
-            <label className="qm-label">{t('quiz.form.commonSubjectId')}</label>
-            <input
-              className="qm-input"
-              type="number"
-              value={form.common_subject_id}
-              onChange={update('common_subject_id')}
-              placeholder="0"
-            />
-          </div>
+        <div className="qm-field">
+          <label className="qm-label">{t('quiz.form.commonSubjectId')}</label>
+          <select className="qm-input qm-select" value={form.common_subject_id} onChange={update('common_subject_id')}>
+            <option value="">{t('quiz.form.commonSubjectPlaceholder')}</option>
+            {subjects.map(s => (
+              <option key={s.id} value={String(s.id)}>{s.name}</option>
+            ))}
+          </select>
         </div>
       </div>
 

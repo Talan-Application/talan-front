@@ -94,20 +94,32 @@
       "deleteConfirm": "Бұл тестті жою керек пе?",
       "createFailed": "Тестті жасау мүмкін болмады.",
       "saveFailed": "Сақтау мүмкін болмады.",
-      "deleteFailed": "Жою мүмкін болмады. Қайталап көріңіз."
+      "deleteFailed": "Жою мүмкін болмады. Қайталап көріңіз.",
+      "publishFailed": "Жариялау мүмкін болмады. Қайталап көріңіз."
     },
     "available": {
       "title": "Қолжетімді тесттер",
       "noQuizzes": "Тесттер әлі жоқ."
     },
     "card": {
+      "type": "Түрі",
       "language": "Тіл",
       "commonSubjectId": "Жалпы пән ID",
       "created": "Жасалған",
       "take": "Тапсыру",
       "results": "Нәтижелер",
+      "publish": "Жариялау",
       "edit": "Өңдеу",
       "delete": "Жою"
+    },
+    "statuses": {
+      "draft": "Жоба",
+      "published": "Жарияланған"
+    },
+    "types": {
+      "ent": "ҰБТ",
+      "monthly_exam": "Ай сайынғы емтихан",
+      "exam": "Емтихан"
     },
     "form": {
       "titleLabel": "Атауы *",
@@ -116,11 +128,11 @@
       "languagePlaceholder": "мыс. Қазақша",
       "status": "Күйі",
       "statusDraft": "Жоба",
-      "statusActive": "Белсенді",
-      "statusInactive": "Белсенді емес",
+      "statusPublished": "Жарияланған",
       "type": "Түрі",
       "typePlaceholder": "мыс. multiple_choice",
       "commonSubjectId": "Жалпы пән ID",
+      "commonSubjectPlaceholder": "Пәнді таңдаңыз",
       "quizDetails": "Тест мәліметтері",
       "questionsAnswers": "Сұрақтар мен жауаптар",
       "newQuiz": "Жаңа тест",

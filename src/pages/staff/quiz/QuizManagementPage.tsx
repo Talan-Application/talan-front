@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { quizApi } from '../../../api';
 import { useQuizStore } from '../../../stores/quizStore';
-import type { Quiz } from '../../../types/quiz.types';
+import { QuizType, type Quiz } from '../../../types/quiz.types';
 import { PAGE_SIZES, ROUTES } from '../../../constants';
 import { QuizCard } from '../../../components/quiz/QuizCard';
 import { QuizFormModal, type QuizFormData } from '../../../components/quiz/QuizFormModal';
@@ -20,8 +20,7 @@ type ModalState =
 const BLANK_FORM: QuizFormData = {
   title: '',
   language: '',
-  status: 'draft',
-  type: '',
+  type: QuizType.ENT,
   common_subject_id: '',
 };
 
@@ -51,7 +50,6 @@ export function QuizManagementPage() {
     setForm({
       title: item.title,
       language: item.language,
-      status: item.status,
       type: item.type,
       common_subject_id: String(item.common_subject_id),
     });
@@ -67,7 +65,6 @@ export function QuizManagementPage() {
       const quiz = await quizApi.create({
         title: form.title,
         language: form.language,
-        status: form.status,
         type: form.type,
         common_subject_id: Number(form.common_subject_id),
       });
@@ -88,7 +85,6 @@ export function QuizManagementPage() {
       await quizApi.update(modal.item.id, {
         title: form.title,
         language: form.language,
-        status: form.status,
         type: form.type,
         common_subject_id: Number(form.common_subject_id),
       });
@@ -99,7 +95,6 @@ export function QuizManagementPage() {
           ...modal.item,
           title: form.title,
           language: form.language,
-          status: form.status,
           type: form.type,
           common_subject_id: Number(form.common_subject_id),
         },
@@ -108,6 +103,15 @@ export function QuizManagementPage() {
       setFormError(t('quiz.management.saveFailed'));
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handlePublish(id: number) {
+    try {
+      await quizApi.publish(id);
+      await fetchQuizzes();
+    } catch {
+      setDeleteError(t('quiz.management.publishFailed'));
     }
   }
 
@@ -171,6 +175,7 @@ export function QuizManagementPage() {
               <QuizCard
                 key={item.id}
                 item={item}
+                onPublish={() => handlePublish(item.id)}
                 onEdit={() => openEdit(item)}
                 onDelete={() => handleDelete(item.id)}
               />

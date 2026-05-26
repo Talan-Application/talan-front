@@ -3,9 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { authApi } from '../../api';
 import { useAuthStore } from '../../stores/authStore';
-import { setLanguage, type LangCode, LANGUAGES } from '../../i18n';
+import { setLanguage, type LangCode } from '../../i18n';
 import { getApiErrorMessage } from '../../utils/error';
-import { STORAGE_KEYS, ROUTES } from '../../constants';
+import { STORAGE_KEYS, ROUTES, LANGUAGES } from '../../constants';
 import { OtpInput } from '../../components/OtpInput';
 import './auth.css';
 
@@ -54,7 +54,7 @@ export function ConfirmCodePage() {
         const { data } = await authApi.verifyLogin({ email, code });
         setAuthData(data);
         const locale = data.user.preferred_locale;
-        if (locale && LANGUAGES.some(l => l.code === locale)) {
+        if (locale && LANGUAGES.some(l => l.languageCode === locale)) {
           setLanguage(locale as LangCode);
         }
         navigate(ROUTES.HOME, { replace: true });

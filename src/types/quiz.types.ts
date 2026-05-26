@@ -1,10 +1,25 @@
+export const QuizType = {
+  ENT: "ent",
+  MONTHLY_EXAM: "monthly_exam",
+  EXAM: "exam",
+} as const;
+
+export type QuizType = typeof QuizType[keyof typeof QuizType];
+
+export const QuizStatus = {
+  DRAFT: "draft",
+  PUBLISHED: "published",
+} as const;
+
+export type QuizStatus = typeof QuizStatus[keyof typeof QuizStatus];
+
 export interface Quiz {
   id: number;
   title: string;
   language: string;
   author_id: number;
-  status: string;
-  type: string;
+  status: QuizStatus;
+  type: QuizType;
   common_subject_id: number;
   created_at: number;
   updated_at: number;
@@ -63,15 +78,13 @@ export interface GetAllAnswersResponse {
 export interface CreateQuizRequest {
   title: string;
   language: string;
-  status: string;
-  type: string;
+  type: QuizType;
   common_subject_id: number;
 }
 export interface UpdateQuizRequest {
   title?: string;
   language?: string;
-  status?: string;
-  type?: string;
+  type?: QuizType;
   common_subject_id?: number;
 }
 export interface CreateQuestionRequest {

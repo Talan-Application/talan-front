@@ -94,20 +94,32 @@
       "deleteConfirm": "Удалить этот тест?",
       "createFailed": "Не удалось создать тест.",
       "saveFailed": "Не удалось сохранить.",
-      "deleteFailed": "Не удалось удалить. Попробуйте снова."
+      "deleteFailed": "Не удалось удалить. Попробуйте снова.",
+      "publishFailed": "Не удалось опубликовать. Попробуйте снова."
     },
     "available": {
       "title": "Доступные тесты",
       "noQuizzes": "Тестов пока нет."
     },
     "card": {
+      "type": "Тип",
       "language": "Язык",
       "commonSubjectId": "ID общего предмета",
       "created": "Создан",
       "take": "Пройти",
       "results": "Результаты",
+      "publish": "Опубликовать",
       "edit": "Редактировать",
       "delete": "Удалить"
+    },
+    "statuses": {
+      "draft": "Черновик",
+      "published": "Опубликован"
+    },
+    "types": {
+      "ent": "ЕНТ",
+      "monthly_exam": "Ежемесячный экзамен",
+      "exam": "Экзамен"
     },
     "form": {
       "titleLabel": "Название *",
@@ -116,11 +128,11 @@
       "languagePlaceholder": "напр. Русский",
       "status": "Статус",
       "statusDraft": "Черновик",
-      "statusActive": "Активный",
-      "statusInactive": "Неактивный",
+      "statusPublished": "Опубликован",
       "type": "Тип",
       "typePlaceholder": "напр. multiple_choice",
       "commonSubjectId": "ID общего предмета",
+      "commonSubjectPlaceholder": "Выберите предмет",
       "quizDetails": "Детали теста",
       "questionsAnswers": "Вопросы и ответы",
       "newQuiz": "Новый тест",

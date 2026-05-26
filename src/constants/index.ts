@@ -13,6 +13,13 @@ export const PASS_THRESHOLD = 60;
 export const STAFF_ROLES = ['admin', 'curator', 'teacher'] as const;
 export type StaffRole = typeof STAFF_ROLES[number];
 
+export const LANGUAGES = [
+  { languageCode: 'ru', name: 'Русский', nativeName: 'Русский', isActive: true },
+  { languageCode: 'kk', name: 'Қазақша', nativeName: 'Қазақша', isActive: true },
+] as const;
+
+export type LanguageCode = typeof LANGUAGES[number]['languageCode'];
+
 export const ROUTES = {
   HOME: '/home',
   LANDING: '/',

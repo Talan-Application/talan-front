@@ -2,15 +2,11 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import ru from './locales/ru.json';
 import kk from './locales/kk.json';
+import type { LanguageCode } from '../constants';
 
 const LANG_KEY = 'lang';
 
-export const LANGUAGES = [
-  { code: 'ru', label: 'RU' },
-  { code: 'kk', label: 'KK' },
-] as const;
-
-export type LangCode = (typeof LANGUAGES)[number]['code'];
+export type LangCode = LanguageCode;
 
 i18n.use(initReactI18next).init({
   resources: {

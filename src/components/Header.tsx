@@ -3,8 +3,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../stores/authStore';
 import { authApi } from '../api';
-import { ROUTES } from '../constants';
-import { LANGUAGES, setLanguage, type LangCode } from '../i18n';
+import { ROUTES, LANGUAGES } from '../constants';
+import { setLanguage, type LangCode } from '../i18n';
 import './header.css';
 
 export function Header() {
@@ -70,13 +70,13 @@ export function Header() {
 
       <div className="header-actions">
         <div className="header-lang-switcher">
-          {LANGUAGES.map(({ code, label }) => (
+          {LANGUAGES.map(({ languageCode }) => (
             <button
-              key={code}
-              className={`header-lang-btn${i18n.language === code ? ' active' : ''}`}
-              onClick={() => setLanguage(code as LangCode)}
+              key={languageCode}
+              className={`header-lang-btn${i18n.language === languageCode ? ' active' : ''}`}
+              onClick={() => setLanguage(languageCode as LangCode)}
             >
-              {label}
+              {languageCode.toUpperCase()}
             </button>
           ))}
         </div>

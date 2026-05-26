@@ -21,3 +21,12 @@ export interface UpdateCommonSubjectRequest {
 export interface DeleteCommonSubjectResponse {
   message: string;
 }
+
+export interface CommonSubjectLookupItem {
+  id: number;
+  name: string;
+}
+
+export interface CommonSubjectLookupResponse {
+  common_subjects: CommonSubjectLookupItem[];
+}

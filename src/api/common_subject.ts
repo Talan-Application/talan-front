@@ -1,7 +1,8 @@
 import { apiClient } from './client';
 import { toArray } from '../utils/api';
 import type {
-  CommonSubject, CreateCommonSubjectRequest, UpdateCommonSubjectRequest, DeleteCommonSubjectResponse,
+  CommonSubject, CreateCommonSubjectRequest, UpdateCommonSubjectRequest,
+  DeleteCommonSubjectResponse, CommonSubjectLookupResponse,
 } from '../types/common_subject.types';
 
 export const commonSubjectApi = {
@@ -19,4 +20,7 @@ export const commonSubjectApi = {
 
   delete: (id: number) =>
     apiClient.delete<DeleteCommonSubjectResponse>(`/common-subjects/${id}`).then(r => r.data),
+
+  lookup: () =>
+    apiClient.get<CommonSubjectLookupResponse>('/common-subjects/lookup').then(r => r.data.common_subjects),
 };

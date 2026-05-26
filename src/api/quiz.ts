@@ -21,6 +21,9 @@ export const quizApi = {
   delete: (id: number) =>
     apiClient.delete(`/quizzes/${id}`),
 
+  publish: (id: number) =>
+    apiClient.patch(`/quizzes/${id}/publish`),
+
   takeQuiz: (id: number) =>
     apiClient.get<TakeQuizResponse>(`/quizzes/${id}/take`).then(r => r.data),
 
