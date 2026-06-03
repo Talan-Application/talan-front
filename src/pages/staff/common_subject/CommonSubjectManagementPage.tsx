@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Pencil, Trash2 } from 'lucide-react';
 import { commonSubjectApi } from '../../../api';
 import type { CommonSubject } from '../../../types/common_subject.types';
 import { ROUTES } from '../../../constants';
@@ -171,16 +172,18 @@ export function CommonSubjectManagementPage() {
                       <td>
                         <div className="qm-td-actions">
                           <button
-                            className="qm-btn qm-btn-ghost qm-btn-sm"
+                            className="qm-btn qm-btn-ghost qm-btn-sm qm-btn-icon"
                             onClick={() => openEdit(common_subject)}
+                            data-tooltip={t('common.edit')}
                           >
-                            {t('common.edit')}
+                            <Pencil size={15} />
                           </button>
                           <button
-                            className="qm-btn qm-btn-danger qm-btn-sm"
+                            className="qm-btn qm-btn-danger qm-btn-sm qm-btn-icon"
                             onClick={() => handleDelete(common_subject)}
+                            data-tooltip={t('common.delete')}
                           >
-                            {t('common.delete')}
+                            <Trash2 size={15} />
                           </button>
                         </div>
                       </td>
