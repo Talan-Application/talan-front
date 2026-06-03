@@ -50,26 +50,32 @@ export function QuizCard({ item, onEdit, onDelete, onPublish }: Props) {
         </div>
       </dl>
       <div className="quiz-card-actions">
-        <button className="qm-btn qm-btn-sm qm-btn-primary" onClick={() => navigate(ROUTES.TAKE_QUIZ(item.id))}>
-          {t('quiz.card.take')}
-        </button>
-        <button className="qm-btn qm-btn-sm qm-btn-ghost" onClick={() => navigate(ROUTES.QUIZ_RESULTS(item.id))}>
-          {t('quiz.card.results')}
-        </button>
-        {onPublish && item.status === QuizStatus.DRAFT && (
-          <button className="qm-btn qm-btn-sm qm-btn-primary" onClick={onPublish}>
-            {t('quiz.card.publish')}
+        <div className="quiz-card-actions-row">
+          <button className="qm-btn qm-btn-sm qm-btn-primary" onClick={() => navigate(ROUTES.TAKE_QUIZ(item.id))}>
+            {t('quiz.card.take')}
           </button>
-        )}
-        {onEdit && (
-          <button className="qm-btn qm-btn-sm qm-btn-ghost" onClick={onEdit}>
-            {t('quiz.card.edit')}
+          <button className="qm-btn qm-btn-sm qm-btn-ghost" onClick={() => navigate(ROUTES.QUIZ_RESULTS(item.id))}>
+            {t('quiz.card.results')}
           </button>
-        )}
-        {onDelete && (
-          <button className="qm-btn qm-btn-sm qm-btn-danger" onClick={onDelete}>
-            {t('quiz.card.delete')}
-          </button>
+        </div>
+        {(onEdit || onDelete || (onPublish && item.status === QuizStatus.DRAFT)) && (
+          <div className="quiz-card-actions-row">
+            {onPublish && item.status === QuizStatus.DRAFT && (
+              <button className="qm-btn qm-btn-sm qm-btn-primary" onClick={onPublish}>
+                {t('quiz.card.publish')}
+              </button>
+            )}
+            {onEdit && (
+              <button className="qm-btn qm-btn-sm qm-btn-ghost" onClick={onEdit}>
+                {t('quiz.card.edit')}
+              </button>
+            )}
+            {onDelete && (
+              <button className="qm-btn qm-btn-sm qm-btn-danger" onClick={onDelete}>
+                {t('quiz.card.delete')}
+              </button>
+            )}
+          </div>
         )}
       </div>
     </div>

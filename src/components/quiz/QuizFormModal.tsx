@@ -29,7 +29,9 @@ export function QuizFormModal({ title, form, onFormChange, error, saving, submit
   const [subjects, setSubjects] = useState<CommonSubjectLookupItem[]>([]);
 
   useEffect(() => {
-    commonSubjectApi.lookup().then(setSubjects).catch(() => {});
+    const controller = new AbortController();
+    commonSubjectApi.lookup(controller.signal).then(setSubjects).catch(() => {});
+    return () => controller.abort();
   }, []);
 
   function update(field: keyof QuizFormData) {

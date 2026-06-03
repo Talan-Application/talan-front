@@ -68,7 +68,6 @@ export function QuizManagementPage() {
         type: form.type,
         common_subject_id: Number(form.common_subject_id),
       });
-      await fetchQuizzes();
       setModal({ mode: 'create-step2', quiz });
     } catch {
       setFormError(t('quiz.management.createFailed'));
@@ -88,7 +87,6 @@ export function QuizManagementPage() {
         type: form.type,
         common_subject_id: Number(form.common_subject_id),
       });
-      await fetchQuizzes();
       setModal({
         mode: 'edit-step2',
         quiz: {

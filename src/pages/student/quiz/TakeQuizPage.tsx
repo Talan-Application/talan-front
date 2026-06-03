@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 import { quizApi } from '../../../api/quiz';
-import { questionApi } from '../../../api/question';
-import { answerApi } from '../../../api/answer';
 import type { TakeQuizResponse, SubmitQuizResponse, QuestionResult } from '../../../types/quiz.types';
 import { getApiErrorMessage } from '../../../utils/error';
 import { PASS_THRESHOLD, ROUTES } from '../../../constants';
@@ -24,33 +23,21 @@ export function TakeQuizPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    const controller = new AbortController();
     async function load() {
       try {
-        const [quiz, rawQuestions] = await Promise.all([
-          quizApi.getById(quizId),
-          questionApi.getByQuizId(quizId, { limit: 100, offset: 0 }),
-        ]);
-        const questions = await Promise.all(
-          rawQuestions.map(async q => {
-            const rawAnswers = await answerApi.getByQuestionId(q.id, { limit: 100, offset: 0 });
-            return {
-              id: q.id,
-              text: q.text,
-              context: q.context,
-              video_answer_url: q.video_answer_url,
-              order: q.order,
-              answers: rawAnswers.map(a => ({ id: a.id, text: a.text })),
-            };
-          })
-        );
-        setQuizData({ quiz, questions } satisfies TakeQuizResponse);
+        const data = await quizApi.takeQuiz(quizId, controller.signal);
+        setQuizData(data);
         setPhase('taking');
       } catch (err) {
-        setError(getApiErrorMessage(err));
-        setPhase('error');
+        if (!axios.isCancel(err)) {
+          setError(getApiErrorMessage(err));
+          setPhase('error');
+        }
       }
     }
     void load();
+    return () => controller.abort();
   }, [quizId]);
 
   function selectAnswer(questionId: number, answerId: number) {

@@ -9,9 +9,9 @@ export const questionApi = {
   getAll: () =>
     apiClient.get('/questions').then(r => toArray<Question>(r.data)),
 
-  getByQuizId: (quizId: number, params: { limit: number; offset: number }) =>
+  getByQuizId: (quizId: number, params: { limit: number; offset: number }, signal?: AbortSignal) =>
     apiClient
-      .get<GetAllQuestionsResponse>(`/quizzes/${quizId}/questions`, { params })
+      .get<GetAllQuestionsResponse>(`/quizzes/${quizId}/questions`, { params, signal })
       .then(r => (r.data.questions ?? []) as QuestionResponse[]),
 
   getById: (id: number) =>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 import { questionApi, answerApi } from '../../api';
 import type { Quiz, Question, Answer } from '../../types/quiz.types';
 import { Modal } from './Modal';
@@ -82,25 +83,27 @@ export function EditQuestionsModal({ quiz, onClose }: Props) {
   }
 
   useEffect(() => {
+    const controller = new AbortController();
     async function load() {
       setLoading(true);
       setLoadError('');
       try {
-        const rawQuestions = await questionApi.getByQuizId(quiz.id, { limit: 100, offset: 0 });
+        const rawQuestions = await questionApi.getByQuizId(quiz.id, { limit: 100, offset: 0 }, controller.signal);
         const withAnswers = await Promise.all(
           rawQuestions.map(async q => {
-            const rawAnswers = await answerApi.getByQuestionId(q.id, { limit: 100, offset: 0 });
+            const rawAnswers = await answerApi.getByQuestionId(q.id, { limit: 100, offset: 0 }, controller.signal);
             return { ...q, answers: rawAnswers.map(a => ({ ...a, is_correct: a.correct })) };
           })
         );
         setQuestions(withAnswers);
-      } catch {
-        setLoadError(t('quiz.questions.loadFailed'));
+      } catch (err) {
+        if (!axios.isCancel(err)) setLoadError(t('quiz.questions.loadFailed'));
       } finally {
         setLoading(false);
       }
     }
     void load();
+    return () => controller.abort();
   }, [quiz.id, refreshKey, t]);
 
   function startEdit(q: QuestionWithAnswers) {

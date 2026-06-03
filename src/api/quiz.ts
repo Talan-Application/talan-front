@@ -24,8 +24,8 @@ export const quizApi = {
   publish: (id: number) =>
     apiClient.patch(`/quizzes/${id}/publish`),
 
-  takeQuiz: (id: number) =>
-    apiClient.get<TakeQuizResponse>(`/quizzes/${id}/take`).then(r => r.data),
+  takeQuiz: (id: number, signal?: AbortSignal) =>
+    apiClient.get<TakeQuizResponse>(`/quizzes/${id}/take`, { signal }).then(r => r.data),
 
   submitQuiz: (id: number, data: SubmitQuizRequest) =>
     apiClient.post<SubmitQuizResponse>(`/quizzes/${id}/submit`, data).then(r => r.data),

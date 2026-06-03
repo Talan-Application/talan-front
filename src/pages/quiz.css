@@ -398,10 +398,17 @@
 
 .quiz-card-actions {
   display: flex;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.45rem;
   margin-top: auto;
   padding-top: 0.5rem;
   border-top: 1px solid #edf2f7;
+}
+
+.quiz-card-actions-row {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
 }
 
 /* ── Status badge ────────────────────────────────────────────────────────── */

@@ -21,6 +21,6 @@ export const commonSubjectApi = {
   delete: (id: number) =>
     apiClient.delete<DeleteCommonSubjectResponse>(`/common-subjects/${id}`).then(r => r.data),
 
-  lookup: () =>
-    apiClient.get<CommonSubjectLookupResponse>('/common-subjects/lookup').then(r => r.data.common_subjects),
+  lookup: (signal?: AbortSignal) =>
+    apiClient.get<CommonSubjectLookupResponse>('/common-subjects/lookup', { signal }).then(r => r.data.common_subjects),
 };
