@@ -113,6 +113,28 @@
   font-size: 0.9rem;
 }
 
+.qm-th-sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.qm-th-sortable:hover {
+  color: #4f46e5;
+  background: #eef2ff;
+}
+
+.qm-sort-icon {
+  margin-left: 0.2rem;
+  opacity: 0.35;
+  font-size: 0.68rem;
+}
+
+.qm-sort-icon-active {
+  opacity: 1;
+  color: #4f46e5;
+}
+
 .qm-table th {
   text-align: left;
   padding: 0.75rem 1.5rem;
@@ -268,6 +290,59 @@
   padding: 0.3rem 0.7rem;
   font-size: 0.82rem;
   border-radius: 5px;
+}
+
+.qm-btn-icon {
+  position: relative;
+  padding: 0.3rem;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* tooltip bubble */
+.qm-btn-icon::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.88);
+  white-space: nowrap;
+  background: #1e293b;
+  color: #f8fafc;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+/* tooltip arrow */
+.qm-btn-icon::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.88);
+  border: 5px solid transparent;
+  border-top-color: #1e293b;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 100;
+}
+
+.qm-btn-icon:hover::after,
+.qm-btn-icon:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
 }
 
 /* ── Messages ────────────────────────────────────────────────────────────── */
@@ -805,6 +880,22 @@
 
 .qm-error-inline {
   margin: 0 1.5rem 0.5rem;
+}
+
+/* ── Create Quiz page card ───────────────────────────────────────────────── */
+
+.qm-create-card {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.qm-create-card .qm-form {
+  padding: 1.5rem 1.75rem;
+}
+
+.qm-create-card .qm-modal-footer {
+  border-radius: 0 0 10px 10px;
 }
 
 /* ── Edit Questions Modal ────────────────────────────────────────────────── */

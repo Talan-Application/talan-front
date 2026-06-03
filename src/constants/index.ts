@@ -29,6 +29,9 @@ export const ROUTES = {
   QUIZZES: '/quizzes',
   COMMON_SUBJECTS: '/common-subjects',
   STUDENT_QUIZZES: '/student/quizzes',
+  QUIZ_CREATE: '/quizzes/new',
+  QUIZ_EDIT: (id: number) => `/quizzes/${id}/edit`,
+  QUIZ_ADD_QUESTION: (id: number) => `/quizzes/${id}/questions/new`,
   TAKE_QUIZ: (id: number) => `/quizzes/${id}/take`,
   QUIZ_RESULTS: (id: number) => `/quizzes/${id}/results`,
 } as const;

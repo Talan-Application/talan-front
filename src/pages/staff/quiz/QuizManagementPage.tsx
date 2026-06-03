@@ -1,28 +1,16 @@
 import { useState, useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Pencil, Trash2 } from 'lucide-react';
 import { quizApi } from '../../../api';
 import { useQuizStore } from '../../../stores/quizStore';
-import { QuizStatus, QuizType, type Quiz } from '../../../types/quiz.types';
+import { QuizStatus, type Quiz } from '../../../types/quiz.types';
 import { PAGE_SIZES, ROUTES } from '../../../constants';
 import { formatDate } from '../../../utils/format';
-import { QuizFormModal, type QuizFormData } from '../../../components/quiz/QuizFormModal';
-import { AddQuestionsModal } from '../../../components/quiz/AddQuestionsModal';
-import { EditQuestionsModal } from '../../../components/quiz/EditQuestionsModal';
 import '../../quiz.css';
 
-type ModalState =
-  | { mode: 'create-step1' }
-  | { mode: 'create-step2'; quiz: Quiz }
-  | { mode: 'edit-step1'; item: Quiz }
-  | { mode: 'edit-step2'; quiz: Quiz };
-
-const BLANK_FORM: QuizFormData = {
-  title: '',
-  language: '',
-  type: QuizType.ENT,
-  common_subject_id: '',
-};
+type SortKey = 'id' | 'title' | 'status' | 'created_at';
+type SortDir = 'asc' | 'desc';
 
 const STATUS_CLASS: Record<QuizStatus, string> = {
   [QuizStatus.DRAFT]: 'qm-status-draft',
@@ -33,12 +21,30 @@ export function QuizManagementPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { items, loading, error, limit, offset, hasMore, setLimit, setOffset, fetchQuizzes } = useQuizStore();
-  const [modal, setModal] = useState<ModalState | null>(null);
-  const [form, setForm] = useState<QuizFormData>(BLANK_FORM);
-  const [saving, setSaving] = useState(false);
-  const [formError, setFormError] = useState('');
   const [deleteError, setDeleteError] = useState('');
   const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [sortKey, setSortKey] = useState<SortKey>('id');
+  const [sortDir, setSortDir] = useState<SortDir>('asc');
+
+  function handleSort(key: SortKey) {
+    if (sortKey === key) {
+      setSortDir(d => (d === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortKey(key);
+      setSortDir('asc');
+    }
+  }
+
+  const sortedItems = [...items].sort((a, b) => {
+    let cmp = 0;
+    switch (sortKey) {
+      case 'id': cmp = a.id - b.id; break;
+      case 'title': cmp = a.title.localeCompare(b.title); break;
+      case 'status': cmp = a.status.localeCompare(b.status); break;
+      case 'created_at': cmp = (a.created_at ?? 0) - (b.created_at ?? 0); break;
+    }
+    return sortDir === 'asc' ? cmp : -cmp;
+  });
 
   useEffect(() => {
     const controller = new AbortController();
@@ -48,70 +54,6 @@ export function QuizManagementPage() {
 
   function toggleExpand(id: number) {
     setExpandedId(prev => (prev === id ? null : id));
-  }
-
-  function openCreate() {
-    setForm(BLANK_FORM);
-    setFormError('');
-    setModal({ mode: 'create-step1' });
-  }
-
-  function openEdit(item: Quiz) {
-    setForm({
-      title: item.title,
-      language: item.language,
-      type: item.type,
-      common_subject_id: String(item.common_subject_id),
-    });
-    setFormError('');
-    setModal({ mode: 'edit-step1', item });
-  }
-
-  async function handleCreate() {
-    if (!form.title.trim()) return;
-    setSaving(true);
-    setFormError('');
-    try {
-      const quiz = await quizApi.create({
-        title: form.title,
-        language: form.language,
-        type: form.type,
-        common_subject_id: Number(form.common_subject_id),
-      });
-      setModal({ mode: 'create-step2', quiz });
-    } catch {
-      setFormError(t('quiz.management.createFailed'));
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  async function handleEdit() {
-    if (modal?.mode !== 'edit-step1' || !form.title.trim()) return;
-    setSaving(true);
-    setFormError('');
-    try {
-      await quizApi.update(modal.item.id, {
-        title: form.title,
-        language: form.language,
-        type: form.type,
-        common_subject_id: Number(form.common_subject_id),
-      });
-      setModal({
-        mode: 'edit-step2',
-        quiz: {
-          ...modal.item,
-          title: form.title,
-          language: form.language,
-          type: form.type,
-          common_subject_id: Number(form.common_subject_id),
-        },
-      });
-    } catch {
-      setFormError(t('quiz.management.saveFailed'));
-    } finally {
-      setSaving(false);
-    }
   }
 
   async function handlePublish(id: number) {
@@ -133,11 +75,6 @@ export function QuizManagementPage() {
     } catch {
       setDeleteError(t('quiz.management.deleteFailed'));
     }
-  }
-
-  async function closeModal() {
-    setModal(null);
-    await fetchQuizzes();
   }
 
   const page = Math.floor(offset / limit) + 1;
@@ -163,7 +100,7 @@ export function QuizManagementPage() {
               {PAGE_SIZES.map(n => <option key={n} value={n}>{n}</option>)}
             </select>
           </div>
-          <button className="qm-btn qm-btn-primary" onClick={openCreate}>{t('quiz.management.newQuiz')}</button>
+          <button className="qm-btn qm-btn-primary" onClick={() => navigate(ROUTES.QUIZ_CREATE)}>{t('quiz.management.newQuiz')}</button>
         </div>
 
         {(error || deleteError) && <p className="qm-error">{error || deleteError}</p>}
@@ -176,21 +113,32 @@ export function QuizManagementPage() {
         ) : items.length === 0 ? (
           <div className="qm-empty-state">
             <p>{t('quiz.management.noQuizzes')}</p>
-            <button className="qm-btn qm-btn-primary" onClick={openCreate}>{t('quiz.management.createFirst')}</button>
+            <button className="qm-btn qm-btn-primary" onClick={() => navigate(ROUTES.QUIZ_CREATE)}>{t('quiz.management.createFirst')}</button>
           </div>
         ) : (
           <div className="qm-section">
             <table className="qm-table">
               <thead>
                 <tr>
-                  <th>{t('common.id')}</th>
-                  <th>{t('quiz.table.title')}</th>
-                  <th>{t('quiz.table.status')}</th>
-                  <th>{t('quiz.table.date')}</th>
+                  {(['id', 'title', 'status', 'created_at'] as SortKey[]).map(key => (
+                    <th
+                      key={key}
+                      className="qm-th-sortable"
+                      onClick={() => handleSort(key)}
+                    >
+                      {key === 'id' ? t('common.id')
+                        : key === 'title' ? t('quiz.table.title')
+                        : key === 'status' ? t('quiz.table.status')
+                        : t('quiz.table.date')}
+                      <span className={`qm-sort-icon${sortKey === key ? ' qm-sort-icon-active' : ''}`}>
+                        {sortKey === key ? (sortDir === 'asc' ? ' ▲' : ' ▼') : ' ⇅'}
+                      </span>
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
-                {items.map(item => (
+                {sortedItems.map((item: Quiz) => (
                   <Fragment key={item.id}>
                     <tr
                       className={`qm-tr-clickable${expandedId === item.id ? ' qm-tr-expanded' : ''}`}
@@ -224,16 +172,18 @@ export function QuizManagementPage() {
                               {t('quiz.card.results')}
                             </button>
                             <button
-                              className="qm-btn qm-btn-sm qm-btn-ghost"
-                              onClick={() => openEdit(item)}
+                              className="qm-btn qm-btn-sm qm-btn-ghost qm-btn-icon"
+                              onClick={() => navigate(ROUTES.QUIZ_EDIT(item.id))}
+                              data-tooltip={t('quiz.card.edit')}
                             >
-                              {t('quiz.card.edit')}
+                              <Pencil size={15} />
                             </button>
                             <button
-                              className="qm-btn qm-btn-sm qm-btn-danger"
+                              className="qm-btn qm-btn-sm qm-btn-danger qm-btn-icon"
                               onClick={() => void handleDelete(item.id)}
+                              data-tooltip={t('quiz.card.delete')}
                             >
-                              {t('quiz.card.delete')}
+                              <Trash2 size={15} />
                             </button>
                           </div>
                         </td>
@@ -266,37 +216,6 @@ export function QuizManagementPage() {
           </div>
         )}
       </div>
-
-      {modal?.mode === 'create-step1' && (
-        <QuizFormModal
-          title={t('quiz.form.newQuiz')}
-          form={form}
-          onFormChange={setForm}
-          error={formError}
-          saving={saving}
-          submitLabel={t('quiz.form.nextAddQuestions')}
-          onCancel={() => setModal(null)}
-          onSubmit={handleCreate}
-        />
-      )}
-      {modal?.mode === 'create-step2' && (
-        <AddQuestionsModal quiz={modal.quiz} onClose={closeModal} />
-      )}
-      {modal?.mode === 'edit-step1' && (
-        <QuizFormModal
-          title={t('quiz.form.editQuiz')}
-          form={form}
-          onFormChange={setForm}
-          error={formError}
-          saving={saving}
-          submitLabel={t('quiz.form.saveEditQuestions')}
-          onCancel={() => setModal(null)}
-          onSubmit={handleEdit}
-        />
-      )}
-      {modal?.mode === 'edit-step2' && (
-        <EditQuestionsModal quiz={modal.quiz} onClose={closeModal} />
-      )}
     </div>
   );
 }

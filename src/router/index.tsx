@@ -5,6 +5,9 @@ import { ConfirmCodePage } from '../pages/auth/ConfirmCodePage';
 import { LandingPage } from '../pages/LandingPage';
 import { StaffHomePage } from '../pages/staff/home/StaffHomePage';
 import { QuizManagementPage } from '../pages/staff/quiz/QuizManagementPage';
+import { CreateQuizPage } from '../pages/staff/quiz/CreateQuizPage';
+import { EditQuizPage } from '../pages/staff/quiz/EditQuizPage';
+import { AddQuestionPage } from '../pages/staff/quiz/AddQuestionPage';
 import { CommonSubjectManagementPage } from '../pages/staff/common_subject/CommonSubjectManagementPage';
 import { StudentHomePage } from '../pages/student/home/StudentHomePage';
 import { StudentQuizListPage } from '../pages/student/quiz/StudentQuizListPage';
@@ -41,6 +44,36 @@ export const router = createBrowserRouter([
       <ProtectedRoute allowedRoles={[...STAFF_ROLES]}>
         <Layout>
           <QuizManagementPage />
+        </Layout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/quizzes/new',
+    element: (
+      <ProtectedRoute allowedRoles={[...STAFF_ROLES]}>
+        <Layout>
+          <CreateQuizPage />
+        </Layout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/quizzes/:id/edit',
+    element: (
+      <ProtectedRoute allowedRoles={[...STAFF_ROLES]}>
+        <Layout>
+          <EditQuizPage />
+        </Layout>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/quizzes/:id/questions/new',
+    element: (
+      <ProtectedRoute allowedRoles={[...STAFF_ROLES]}>
+        <Layout>
+          <AddQuestionPage />
         </Layout>
       </ProtectedRoute>
     ),
