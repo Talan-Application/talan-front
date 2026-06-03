@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { quizApi } from '../../../api';
 import { useQuizStore } from '../../../stores/quizStore';
-import { QuizType, type Quiz } from '../../../types/quiz.types';
+import { QuizStatus, QuizType, type Quiz } from '../../../types/quiz.types';
 import { PAGE_SIZES, ROUTES } from '../../../constants';
-import { QuizCard } from '../../../components/quiz/QuizCard';
+import { formatDate } from '../../../utils/format';
 import { QuizFormModal, type QuizFormData } from '../../../components/quiz/QuizFormModal';
 import { AddQuestionsModal } from '../../../components/quiz/AddQuestionsModal';
 import { EditQuestionsModal } from '../../../components/quiz/EditQuestionsModal';
@@ -24,6 +24,11 @@ const BLANK_FORM: QuizFormData = {
   common_subject_id: '',
 };
 
+const STATUS_CLASS: Record<QuizStatus, string> = {
+  [QuizStatus.DRAFT]: 'qm-status-draft',
+  [QuizStatus.PUBLISHED]: 'qm-status-active',
+};
+
 export function QuizManagementPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -33,12 +38,17 @@ export function QuizManagementPage() {
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState('');
   const [deleteError, setDeleteError] = useState('');
+  const [expandedId, setExpandedId] = useState<number | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
     void fetchQuizzes(controller.signal);
     return () => controller.abort();
   }, [limit, offset, fetchQuizzes]);
+
+  function toggleExpand(id: number) {
+    setExpandedId(prev => (prev === id ? null : id));
+  }
 
   function openCreate() {
     setForm(BLANK_FORM);
@@ -118,6 +128,7 @@ export function QuizManagementPage() {
     setDeleteError('');
     try {
       await quizApi.delete(id);
+      setExpandedId(null);
       await fetchQuizzes();
     } catch {
       setDeleteError(t('quiz.management.deleteFailed'));
@@ -168,16 +179,70 @@ export function QuizManagementPage() {
             <button className="qm-btn qm-btn-primary" onClick={openCreate}>{t('quiz.management.createFirst')}</button>
           </div>
         ) : (
-          <div className="quiz-grid">
-            {items.map(item => (
-              <QuizCard
-                key={item.id}
-                item={item}
-                onPublish={() => handlePublish(item.id)}
-                onEdit={() => openEdit(item)}
-                onDelete={() => handleDelete(item.id)}
-              />
-            ))}
+          <div className="qm-section">
+            <table className="qm-table">
+              <thead>
+                <tr>
+                  <th>{t('common.id')}</th>
+                  <th>{t('quiz.table.title')}</th>
+                  <th>{t('quiz.table.status')}</th>
+                  <th>{t('quiz.table.date')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map(item => (
+                  <Fragment key={item.id}>
+                    <tr
+                      className={`qm-tr-clickable${expandedId === item.id ? ' qm-tr-expanded' : ''}`}
+                      onClick={() => toggleExpand(item.id)}
+                    >
+                      <td className="qm-td-id">#{item.id}</td>
+                      <td className="qm-td-main">{item.title}</td>
+                      <td>
+                        <span className={`qm-status ${STATUS_CLASS[item.status] ?? 'qm-status-draft'}`}>
+                          {t(`quiz.statuses.${item.status}`)}
+                        </span>
+                      </td>
+                      <td>{item.created_at ? formatDate(item.created_at) : '—'}</td>
+                    </tr>
+                    {expandedId === item.id && (
+                      <tr className="qm-tr-action-row" onClick={e => e.stopPropagation()}>
+                        <td colSpan={4}>
+                          <div className="qm-tr-action-inner">
+                            {item.status === QuizStatus.DRAFT && (
+                              <button
+                                className="qm-btn qm-btn-sm qm-btn-primary"
+                                onClick={() => void handlePublish(item.id)}
+                              >
+                                {t('quiz.card.publish')}
+                              </button>
+                            )}
+                            <button
+                              className="qm-btn qm-btn-sm qm-btn-ghost"
+                              onClick={() => navigate(ROUTES.QUIZ_RESULTS(item.id))}
+                            >
+                              {t('quiz.card.results')}
+                            </button>
+                            <button
+                              className="qm-btn qm-btn-sm qm-btn-ghost"
+                              onClick={() => openEdit(item)}
+                            >
+                              {t('quiz.card.edit')}
+                            </button>
+                            <button
+                              className="qm-btn qm-btn-sm qm-btn-danger"
+                              onClick={() => void handleDelete(item.id)}
+                            >
+                              {t('quiz.card.delete')}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
 

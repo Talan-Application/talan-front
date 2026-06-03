@@ -326,6 +326,29 @@
   cursor: pointer;
 }
 
+/* ── Expandable table rows ───────────────────────────────────────────────── */
+
+.qm-tr-clickable {
+  cursor: pointer;
+}
+
+.qm-tr-expanded td {
+  background: #eef2ff;
+  border-bottom: none;
+}
+
+.qm-tr-action-row td {
+  padding: 0.6rem 1.5rem 0.75rem;
+  background: #f5f7ff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.qm-tr-action-inner {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
 /* ── Quiz Card Grid ──────────────────────────────────────────────────────── */
 
 .quiz-grid {
