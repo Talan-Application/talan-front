@@ -21,6 +21,7 @@ export interface Quiz {
   status: QuizStatus;
   type: QuizType;
   common_subject_id: number;
+  is_ent_standard: boolean;
   created_at: number;
   updated_at: number;
 }
@@ -80,12 +81,13 @@ export interface CreateQuizRequest {
   language: string;
   type: QuizType;
   common_subject_id: number;
+  is_ent_standard: boolean;
 }
 export interface UpdateQuizRequest {
-  title?: string;
-  language?: string;
-  type?: QuizType;
-  common_subject_id?: number;
+  title: string;
+  language: string;
+  type: QuizType;
+  is_ent_standard: boolean;
 }
 export interface CreateQuestionRequest {
   quiz_id: number;
@@ -129,7 +131,7 @@ export interface TakeQuizResponse {
 
 export interface QuizAnswerSubmission {
   question_id: number;
-  answer_id: number;
+  answer_ids: number[];
 }
 
 export interface SubmitQuizRequest {
@@ -138,16 +140,20 @@ export interface SubmitQuizRequest {
 
 export interface QuestionResult {
   question_id: number;
-  answer_id: number;
-  is_correct: boolean;
-  correct_answer_id: number;
+  selected_answer_ids: number[];
+  correct_answer_ids: number[];
+  score: number;
+  max_score: number;
 }
 
 export interface SubmitQuizResponse {
   result_id: number;
-  total_questions: number;
-  correct_answers: number;
+  total_questions_count: number;
+  correct_answers_count: number;
+  incorrect_answers_count: number;
+  unanswered_questions: number;
   score: number;
+  max_score: number;
   results: QuestionResult[];
 }
 

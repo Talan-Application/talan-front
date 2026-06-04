@@ -53,7 +53,7 @@ export function TakeQuizPage() {
     setPhase('submitting');
     try {
       const result = await quizApi.submitQuiz(quizId, {
-        answers: questions.map(q => ({ question_id: q.id, answer_id: selected[q.id] })),
+        answers: questions.map(q => ({ question_id: q.id, answer_ids: [selected[q.id]] })),
       });
       setSubmitResult(result);
       setPhase('done');
@@ -158,7 +158,7 @@ interface ResultViewProps {
 
 function ResultView({ data, questions, onRetry, onBack, onResults }: ResultViewProps) {
   const { t } = useTranslation();
-  const pct = Math.round(data.score);
+  const pct = data.max_score > 0 ? Math.round((data.score / data.max_score) * 100) : 0;
   const passed = pct >= PASS_THRESHOLD;
 
   const resultMap: Record<number, QuestionResult> = {};
@@ -173,15 +173,15 @@ function ResultView({ data, questions, onRetry, onBack, onResults }: ResultViewP
         </div>
         <div className="tq-score-stats">
           <div className="tq-stat">
-            <span className="tq-stat-val">{data.correct_answers}</span>
+            <span className="tq-stat-val">{data.correct_answers_count}</span>
             <span className="tq-stat-lbl">{t('quiz.take.correct')}</span>
           </div>
           <div className="tq-stat">
-            <span className="tq-stat-val">{data.total_questions - data.correct_answers}</span>
+            <span className="tq-stat-val">{data.incorrect_answers_count}</span>
             <span className="tq-stat-lbl">{t('quiz.take.wrong')}</span>
           </div>
           <div className="tq-stat">
-            <span className="tq-stat-val">{data.total_questions}</span>
+            <span className="tq-stat-val">{data.total_questions_count}</span>
             <span className="tq-stat-lbl">{t('quiz.take.total')}</span>
           </div>
         </div>
@@ -196,9 +196,9 @@ function ResultView({ data, questions, onRetry, onBack, onResults }: ResultViewP
         <h2 className="tq-breakdown-title">{t('quiz.take.breakdown')}</h2>
         {questions.questions.map((q, idx) => {
           const r = resultMap[q.id];
-          const correct = r?.is_correct ?? false;
-          const chosenAns = q.answers.find(a => a.id === r?.answer_id);
-          const correctAns = q.answers.find(a => a.id === r?.correct_answer_id);
+          const correct = r ? r.score >= r.max_score && r.max_score > 0 : false;
+          const chosenAnsList = q.answers.filter(a => r?.selected_answer_ids?.includes(a.id));
+          const correctAnsList = q.answers.filter(a => r?.correct_answer_ids?.includes(a.id));
           return (
             <div key={q.id} className={`tq-breakdown-item ${correct ? 'tq-bd-correct' : 'tq-bd-wrong'}`}>
               <div className="tq-bd-header">
@@ -206,11 +206,11 @@ function ResultView({ data, questions, onRetry, onBack, onResults }: ResultViewP
                 <span className="tq-bd-icon">{correct ? '✓' : '✗'}</span>
               </div>
               <p className="tq-bd-text">{q.text}</p>
-              {chosenAns && (
-                <p className="tq-bd-answer">{t('quiz.take.yourAnswer')} <strong>{chosenAns.text}</strong></p>
+              {chosenAnsList.length > 0 && (
+                <p className="tq-bd-answer">{t('quiz.take.yourAnswer')} <strong>{chosenAnsList.map(a => a.text).join(', ')}</strong></p>
               )}
-              {!correct && correctAns && (
-                <p className="tq-bd-correct-ans">{t('quiz.take.correctAnswer')} <strong>{correctAns.text}</strong></p>
+              {!correct && correctAnsList.length > 0 && (
+                <p className="tq-bd-correct-ans">{t('quiz.take.correctAnswer')} <strong>{correctAnsList.map(a => a.text).join(', ')}</strong></p>
               )}
             </div>
           );

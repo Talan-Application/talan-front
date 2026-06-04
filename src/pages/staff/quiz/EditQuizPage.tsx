@@ -33,6 +33,7 @@ const BLANK_FORM: QuizFormData = {
   language: '',
   type: QuizType.ENT,
   common_subject_id: '',
+  is_ent_standard: false,
 };
 
 function toEditDraft(q: QuestionWithAnswers): QuestionEditDraft {
@@ -82,6 +83,7 @@ export function EditQuizPage() {
           language: quiz.language,
           type: quiz.type,
           common_subject_id: String(quiz.common_subject_id),
+          is_ent_standard: quiz.is_ent_standard,
         });
         setSubjects(subs);
         setFormLoading(false);
@@ -121,6 +123,11 @@ export function EditQuizPage() {
       setForm(prev => ({ ...prev, [field]: e.target.value }));
   }
 
+  function updateCheckbox(field: keyof QuizFormData) {
+    return (e: React.ChangeEvent<HTMLInputElement>) =>
+      setForm(prev => ({ ...prev, [field]: e.target.checked }));
+  }
+
   async function handleSaveQuiz() {
     if (!form.title.trim()) return;
     setSaving(true);
@@ -130,7 +137,7 @@ export function EditQuizPage() {
         title: form.title,
         language: form.language,
         type: form.type,
-        common_subject_id: Number(form.common_subject_id),
+        is_ent_standard: form.is_ent_standard,
       });
       navigate(ROUTES.QUIZZES);
     } catch {
@@ -255,6 +262,16 @@ export function EditQuizPage() {
                     <option key={s.id} value={String(s.id)}>{s.name}</option>
                   ))}
                 </select>
+              </div>
+              <div className="qm-field qm-field-checkbox">
+                <label className="qm-checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={form.is_ent_standard}
+                    onChange={updateCheckbox('is_ent_standard')}
+                  />
+                  {t('quiz.form.isEntStandard')}
+                </label>
               </div>
             </div>
             {saveError && <p className="qm-error qm-error-inline">{saveError}</p>}
