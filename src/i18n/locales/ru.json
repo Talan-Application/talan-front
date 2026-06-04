@@ -139,6 +139,7 @@
       "typePlaceholder": "напр. multiple_choice",
       "commonSubjectId": "ID общего предмета",
       "commonSubjectPlaceholder": "Выберите предмет",
+      "isEntStandard": "Стандарт ЕНТ",
       "quizDetails": "Детали теста",
       "questionsAnswers": "Вопросы и ответы",
       "newQuiz": "Новый тест",

@@ -139,6 +139,7 @@
       "typePlaceholder": "мыс. multiple_choice",
       "commonSubjectId": "Жалпы пән ID",
       "commonSubjectPlaceholder": "Пәнді таңдаңыз",
+      "isEntStandard": "ЕНТ стандарты",
       "quizDetails": "Тест мәліметтері",
       "questionsAnswers": "Сұрақтар мен жауаптар",
       "newQuiz": "Жаңа тест",

@@ -11,6 +11,7 @@ export interface QuizFormData {
   language: string;
   type: QuizType;
   common_subject_id: string;
+  is_ent_standard: boolean;
 }
 
 interface Props {
