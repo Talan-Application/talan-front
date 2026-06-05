@@ -2,7 +2,7 @@ import { apiClient } from './client';
 import { toArray } from '../utils/api';
 import type {
   Question, CreateQuestionRequest, UpdateQuestionRequest,
-  GetAllQuestionsResponse, QuestionResponse,
+  GetAllQuestionsResponse, QuestionResponse, QuestionWithAnswersResponse,
 } from '../types/quiz.types';
 
 export const questionApi = {
@@ -18,7 +18,7 @@ export const questionApi = {
     apiClient.get<Question>(`/questions/${id}`).then(r => r.data),
 
   create: (data: CreateQuestionRequest) =>
-    apiClient.post<Question>('/questions', data).then(r => r.data),
+    apiClient.post<QuestionWithAnswersResponse>('/questions', data).then(r => r.data),
 
   update: (id: number, data: UpdateQuestionRequest) =>
     apiClient.put<Question>(`/questions/${id}`, data).then(r => r.data),

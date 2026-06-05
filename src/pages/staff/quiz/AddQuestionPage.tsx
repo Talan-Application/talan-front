@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { questionApi, answerApi } from '../../../api';
+import { questionApi } from '../../../api';
 import { AnswerField } from '../../../components/quiz/AnswerField';
 import { ROUTES } from '../../../constants';
 import '../../quiz.css';
@@ -45,18 +45,16 @@ export function AddQuestionPage() {
     setSaving(true);
     setError('');
     try {
-      const question = await questionApi.create({
+      await questionApi.create({
         quiz_id: quizId,
         text: form.text,
         ...(form.context.trim() ? { context: form.context.trim() } : {}),
         ...(form.video_answer_url.trim() ? { video_answer_url: form.video_answer_url.trim() } : {}),
         ...(form.order !== '' ? { order: Number(form.order) } : {}),
-      });
-      await Promise.all(
-        form.answers
+        answers: form.answers
           .filter(a => a.text.trim())
-          .map(a => answerApi.create({ question_id: question.id, text: a.text.trim(), is_correct: a.is_correct }))
-      );
+          .map(a => ({ text: a.text.trim(), correct: a.is_correct })),
+      });
       navigate(ROUTES.QUIZ_EDIT(quizId));
     } catch {
       setError(t('quiz.questions.addFailed'));

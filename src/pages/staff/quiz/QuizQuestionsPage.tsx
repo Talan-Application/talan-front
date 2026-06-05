@@ -185,18 +185,16 @@ export function QuizQuestionsPage() {
     setAddSaving(true);
     setAddError('');
     try {
-      const question = await questionApi.create({
+      await questionApi.create({
         quiz_id: quizId,
         text: newDraft.text,
         ...(newDraft.context.trim() ? { context: newDraft.context.trim() } : {}),
         ...(newDraft.video_answer_url.trim() ? { video_answer_url: newDraft.video_answer_url.trim() } : {}),
         ...(newDraft.order !== '' ? { order: Number(newDraft.order) } : {}),
-      });
-      await Promise.all(
-        newDraft.answers
+        answers: newDraft.answers
           .filter(a => a.text.trim())
-          .map(a => answerApi.create({ question_id: question.id, text: a.text.trim(), is_correct: a.is_correct }))
-      );
+          .map(a => ({ text: a.text.trim(), correct: a.is_correct })),
+      });
       setNewDraft(BLANK_DRAFT);
       triggerRefresh();
     } catch {

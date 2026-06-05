@@ -89,13 +89,32 @@ export interface UpdateQuizRequest {
   type: QuizType;
   is_ent_standard: boolean;
 }
+export interface CreateQuestionAnswerDraft {
+  text: string;
+  correct: boolean;
+}
+
 export interface CreateQuestionRequest {
   quiz_id: number;
   text: string;
   context?: string;
   video_answer_url?: string;
   order?: number;
+  answers: CreateQuestionAnswerDraft[];
 }
+
+export interface QuestionWithAnswersResponse {
+  id: number;
+  quiz_id: number;
+  text: string;
+  context: string;
+  video_answer_url: string;
+  order: number;
+  created_at: number;
+  updated_at: number;
+  answers: AnswerResponse[];
+}
+
 export interface UpdateQuestionRequest {
   quiz_id?: number;
   text?: string;

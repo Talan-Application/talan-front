@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { questionApi, answerApi } from '../../api';
+import { questionApi } from '../../api';
 import type { Quiz, Question } from '../../types/quiz.types';
 import { Modal } from './Modal';
 import { AnswerField } from './AnswerField';
@@ -68,12 +68,10 @@ export function AddQuestionsModal({ quiz, onClose }: Props) {
         ...(draft.context.trim() ? { context: draft.context.trim() } : {}),
         ...(draft.video_answer_url.trim() ? { video_answer_url: draft.video_answer_url.trim() } : {}),
         ...(draft.order !== '' ? { order: Number(draft.order) } : {}),
-      });
-      await Promise.all(
-        draft.answers
+        answers: draft.answers
           .filter(a => a.text.trim())
-          .map(a => answerApi.create({ question_id: question.id, text: a.text.trim(), is_correct: a.is_correct }))
-      );
+          .map(a => ({ text: a.text.trim(), correct: a.is_correct })),
+      });
       setSaved(prev => [...prev, question]);
       setDraft(BLANK_DRAFT);
     } catch {
